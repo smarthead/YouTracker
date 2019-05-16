@@ -1,19 +1,26 @@
 {
   "name": "you-tracker",
   "version": "0.1.0",
+  "main": "public/Main.js",
+  "homepage": "./",
   "private": true,
   "dependencies": {
     "react": "^16.8.6",
     "react-dom": "^16.8.6"
   },
   "devDependencies": {
+    "electron": "^5.0.1",
+    "electron-builder": "^20.40.2",
     "react-scripts": "3.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "electron-start": "electron .",
+    "preelectron-pack": "npm run build",
+    "electron-pack": "build -c.extraMetadata.main=build/Main.js"
   },
   "eslintConfig": {
     "extends": "react-app"
