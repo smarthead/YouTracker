@@ -1,7 +1,7 @@
 {
   "name": "you-tracker",
   "version": "0.1.0",
-  "main": "public/Main.js",
+  "main": "public/js/Main.js",
   "homepage": "./",
   "private": true,
   "dependencies": {
@@ -20,7 +20,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "start": "concurrently \"BROWSER=none react-scripts start\" \"wait-on http://localhost:3000 && electron .\"",
-    "pack": "react-scripts build && build -c.extraMetadata.main=build/Main.js"
+    "pack": "react-scripts build && build -c.extraMetadata.main=build/js/Main.js"
   },
   "eslintConfig": {
     "extends": "react-app"
