@@ -1,30 +1,36 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 
-const process = window.require('process');
+// const process = window.require('process');
 
-function App() {
+const tempTasks = [
+  { id: "SHED-14", title: "Посещение ПЗ и других образовательных мероприятий" },
+  { id: "EF-23", title: "Реализовать механизм автоматического снятия скриншотов для App Store" },
+  { id: "CDS-39", title: "Настроить YouTrack" },
+];
+
+const Task = (props) => {
+  const { id, title } = props;
+  return (
+    <div className="Task">
+      <a href="https://yandex.ru" target="_blank" rel="noopener noreferrer">{id}</a> {title}
+    </div>
+  );
+}
+
+const TaskList = (props) => {
+  const { tasks } = props;
+  return (
+    <div className="TaskList">
+      {tasks.map((task) => <Task key={task.id} { ...task } />)}
+    </div>
+  );
+}
+
+const App = () => {
   return (
     <div className="App">
-      <header className="App-header">
-        <h1>Hello World!</h1>       
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <p>
-          Electron version: {process.versions.electron}.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <TaskList tasks={tempTasks}/>
     </div>
   );
 }
