@@ -9,16 +9,17 @@
     "react-dom": "^16.8.6"
   },
   "devDependencies": {
+    "concurrently": "^4.1.0",
     "electron": "^5.0.1",
     "electron-builder": "^20.40.2",
-    "react-scripts": "3.0.1"
+    "react-scripts": "3.0.1",
+    "wait-on": "^3.2.0"
   },
   "scripts": {
-    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "electron-start": "electron .",
+    "start": "concurrently \"BROWSER=none react-scripts start\" \"wait-on http://localhost:3000 && electron .\"",
     "preelectron-pack": "npm run build",
     "electron-pack": "build -c.extraMetadata.main=build/Main.js"
   },
