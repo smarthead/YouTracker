@@ -20,8 +20,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "start": "concurrently \"BROWSER=none react-scripts start\" \"wait-on http://localhost:3000 && electron .\"",
-    "preelectron-pack": "npm run build",
-    "electron-pack": "build -c.extraMetadata.main=build/Main.js"
+    "pack": "react-scripts build && build -c.extraMetadata.main=build/Main.js"
   },
   "eslintConfig": {
     "extends": "react-app"
