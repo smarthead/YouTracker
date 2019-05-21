@@ -1,15 +1,20 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, ipcMain, shell } = require('electron');
 const { join } = require('path');
 const isDev = require('./utils/isDev');
+const urls = require('./urls');
+const core = require('./core');
 
-let win;
+let win = null;
 
 const createWindow = () => {
   win = new BrowserWindow({
     width: 800,
     height: 600,
+    backgroundColor: "#282c34",
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: true,
+      scrollBounce: true,
+      devTools: isDev
     }
   });
   
@@ -26,9 +31,16 @@ const createWindow = () => {
     // when you should delete the corresponding element.
     win = null
   });
+
+  win.webContents.on('did-finish-load', () => {
+    sendAppState();
+  });
 }
 
-app.on('ready', createWindow);
+app.on('ready', () => {
+  createWindow();
+  core.initialize();
+});
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
@@ -46,3 +58,22 @@ app.on('activate', () => {
     createWindow();
   }
 });
+
+const sendAppState = () => {
+  if (win === null) return;
+  win.webContents.send('app-state-updated', core.getState());
+};
+
+ipcMain.on('start-tracking', (event, issueId) => {
+  core.startTracking(issueId);
+});
+
+ipcMain.on('stop-tracking', (event, arg) => {
+  core.stopTracking();
+});
+
+ipcMain.on('view-issue', (event, idReadable) => {
+  shell.openExternal(urls.viewIssue(idReadable));
+});
+
+core.events.on('changed', sendAppState);
