@@ -37,8 +37,13 @@ const stop = () => {
   events.emit('changed');
 }
 
+const add = ({ issueId, minutes }) => {
+  const today = new Date();
+  workItemPosting.commitWorkItem({ issueId, date: today.getTime(), minutes });
+};
+
 const getActiveIssueId = () => {
   return activeTracking ? activeTracking.issueId : null;
 };
 
-export default { events, start, stop, getActiveIssueId };
+export default { events, start, stop, add, getActiveIssueId };

@@ -17,6 +17,10 @@ const stopTracking = () => {
   tracking.stop();
 }
 
+const addWorkItem = (item) => {
+  tracking.add(item);
+}
+
 const getState = () => {
   return {
     issues: issueLoading.getIssues(),
@@ -28,4 +32,4 @@ tracking.events.on('changed', () => { events.emit('changed'); });
 issueLoading.events.on('changed', () => { events.emit('changed'); });
 workItemPosting.events.on('all-sent', () => { issueLoading.reload(); });
 
-export default { events, initialize, startTracking, stopTracking, getState };
+export default { events, initialize, startTracking, stopTracking, addWorkItem, getState };

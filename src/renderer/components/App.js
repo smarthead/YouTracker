@@ -5,7 +5,7 @@ const App = (props) => {
   const { appState } = props
 
   return (
-    <div className="App">
+    <div>
       <IssueList { ...appState }/>
     </div>
   );

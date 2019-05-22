@@ -19,11 +19,6 @@ const createWindow = () => {
   
   mainWindow.loadFile('build/renderer/index.html');
 
-  if (isDev) {
-    // Open the DevTools.
-    mainWindow.webContents.openDevTools();
-  }
-
   // Emitted when the window is closed.
   mainWindow.on('closed', () => {
     // Dereference the window object, usually you would store windows
@@ -77,6 +72,10 @@ ipcMain.on('stop-tracking', (event, arg) => {
 
 ipcMain.on('view-issue', (event, idReadable) => {
   shell.openExternal(urls.viewIssue(idReadable));
+});
+
+ipcMain.on('add-work-item', (event, item) => {
+  core.addWorkItem(item);
 });
 
 core.events.on('changed', sendAppState);

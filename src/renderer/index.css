@@ -15,23 +15,90 @@ code {
     monospace;
 }
 
+:not(input):not(textarea),
+:not(input):not(textarea)::after,
+:not(input):not(textarea)::before {
+    user-select: none;
+}
+
+input, button, textarea, :focus {
+  outline: none;
+}
+
 a {
   color: #61dafb;
 }
 
-.Issue {
-  padding: 4px 8px;
-}
-
-.Issue button {
+button {
   font-size: 1em;
   color: #61dafb;
   text-decoration: underline;
   border: none;
   background: transparent;
   cursor: pointer;
+  white-space: nowrap;
 }
 
-.IssueList {
-  margin: 6px 0px;
+.issueList {
+  margin: 8px 0px;
+}
+
+.issue {
+  position: relative;
+  padding: 0px 8px;
+  height: 30px;
+}
+
+.issue__left {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  height: 30px;
+}
+
+.issue__right {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  min-width: 120px;
+  height: 30px;
+  background: linear-gradient(to right, #282c3400 0%, #282c34ff 40%, #282c34ff 100%);
+}
+
+.issue__summary {
+  overflow: hidden;
+  white-space: nowrap;
+  cursor: default;
+}
+
+.issue__start-button {
+  visibility: hidden;
+  padding: 3px 6px;
+}
+
+.issue:hover .issue__start-button {
+  visibility: visible;
+}
+
+.issue__stop-button {
+  padding: 3px 6px;
+}
+
+.issue__add-button {
+  visibility: hidden;
+  padding: 3px 16px 3px 6px;
+}
+
+.issue:hover .issue__add-button {
+  visibility: visible;
+}
+
+.issue__time {
+  color: #666666;
+  padding: 3px;
+  cursor: default;
 }
