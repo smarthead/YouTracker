@@ -8,28 +8,21 @@ const headers = {
 }
 
 const getIssues = async () => {
-  try {
-    const response = await fetch(urls.getIssues, { headers });
-    return response.json();
-  }
-  catch (error) {
-    throw error;
-  }
+  const response = await fetch(urls.getIssues, { headers });
+  return response.ok ? response.json() : [];
 };
 
 const postWorkItem = async ({ issueId, date, minutes }) => {
-  try {
-    await fetch(urls.postWorkItems(issueId), {
-      headers,
-      method: 'POST',
-      body: JSON.stringify({
-        date,
-        duration: { minutes },
-      })
-    });
-  }
-  catch (error) {
-    throw error;
+  const response = await fetch(urls.postWorkItems(issueId), {
+    headers,
+    method: 'POST',
+    body: JSON.stringify({
+      date,
+      duration: { minutes },
+    })
+  });
+  if (response.status >= 500 && response.status < 600) {
+    throw new Error("Server error");
   }
 }
 
