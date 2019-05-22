@@ -1,5 +1,5 @@
-const { EventEmitter } = require('events');
-const workItemPosting = require('./workItemPosting');
+import { EventEmitter } from 'events';
+import workItemPosting from './workItemPosting';
 
 let events = new EventEmitter();
 
@@ -41,4 +41,4 @@ const getActiveIssueId = () => {
   return activeTracking ? activeTracking.issueId : null;
 };
 
-module.exports = { events, start, stop, getActiveIssueId };
+export default { events, start, stop, getActiveIssueId };

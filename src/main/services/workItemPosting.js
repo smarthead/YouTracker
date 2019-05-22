@@ -1,5 +1,5 @@
-const { EventEmitter } = require('events');
-const api = require('./api');
+import { EventEmitter } from 'events';
+import api from './api';
 
 // TODO реализовать таймер повторной отправки
 
@@ -37,4 +37,4 @@ const send = () => {
     });
 };
 
-module.exports = { events, commitWorkItem };
+export default { events, commitWorkItem };

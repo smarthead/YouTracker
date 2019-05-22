@@ -1,7 +1,7 @@
-const { EventEmitter } = require('events');
-const tracking = require('./services/tracking');
-const issueLoading = require('./services/issueLoading');
-const workItemPosting = require('./services/workItemPosting');
+import { EventEmitter } from 'events';
+import tracking from './services/tracking';
+import issueLoading from './services/issueLoading';
+import workItemPosting from './services/workItemPosting';
 
 let events = new EventEmitter();
 
@@ -28,4 +28,4 @@ tracking.events.on('changed', () => { events.emit('changed'); });
 issueLoading.events.on('changed', () => { events.emit('changed'); });
 workItemPosting.events.on('all-sent', () => { issueLoading.reload(); });
 
-module.exports = { events, initialize, startTracking, stopTracking, getState };
+export default { events, initialize, startTracking, stopTracking, getState };

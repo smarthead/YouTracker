@@ -1,6 +1,5 @@
 import React from 'react';
 import Issue from './Issue';
-import './IssueList.css';
 
 const IssueList = (props) => {
   const { issues, activeIssueId } = props;

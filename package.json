@@ -1,41 +1,37 @@
 {
   "name": "you-tracker",
-  "version": "0.1.0",
-  "main": "public/js/Main.js",
-  "homepage": "./",
-  "private": true,
+  "version": "1.0.0",
+  "description": "",
+  "main": "build/main/main.js",
+  "scripts": {
+    "build": "babel src --out-dir build --copy-files",
+    "start": "npm run build && electron .",
+    "pack": "npm run build && build -c.extraMetadata.main=build/main/main.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.4.4",
+    "@babel/preset-env": "^7.4.4",
+    "@babel/preset-react": "^7.0.0",
+    "electron": "^5.0.1",
+    "electron-builder": "^20.40.2"
+  },
   "dependencies": {
+    "node-fetch": "^2.6.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6"
   },
-  "devDependencies": {
-    "concurrently": "^4.1.0",
-    "electron": "^5.0.1",
-    "electron-builder": "^20.40.2",
-    "node-fetch": "^2.6.0",
-    "react-scripts": "3.0.1",
-    "wait-on": "^3.2.0"
-  },
-  "scripts": {
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "start": "concurrently \"BROWSER=none react-scripts start\" \"wait-on http://localhost:3000 && electron .\"",
-    "pack": "react-scripts build && build -c.extraMetadata.main=build/js/Main.js"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
+  "build": {
+    "appId": "ru.smarthead.you-tracker",
+    "files": [
+      "build/**/*",
+      "node_modules/**/*"
     ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "directories": {
+      "buildResources": "assets"
+    }
   }
 }

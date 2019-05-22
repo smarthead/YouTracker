@@ -1,5 +1,5 @@
-const fetch = require('node-fetch');
-const urls = require('../urls');
+import fetch from 'node-fetch';
+import urls from '../urls';
 
 const headers = {
   'Authorization': `Bearer ${process.env.TOKEN}`,
@@ -26,4 +26,4 @@ const postWorkItem = async ({ issueId, date, minutes }) => {
   }
 }
 
-module.exports = { getIssues, postWorkItem };
+export default { getIssues, postWorkItem };

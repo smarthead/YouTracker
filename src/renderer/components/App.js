@@ -1,6 +1,5 @@
 import React from 'react';
-import IssueList from './components/IssueList';
-import './App.css';
+import IssueList from './IssueList';
 
 const App = (props) => {
   const { appState } = props

@@ -7,4 +7,4 @@ const postWorkItems = (issueId) => `${base}/api/issues/${issueId}/timeTracking/w
 // Web
 const viewIssue = (idReadable) => `${base}/issue/${idReadable}`;
 
-module.exports = { getIssues, postWorkItems, viewIssue };
+export default { getIssues, postWorkItems, viewIssue };

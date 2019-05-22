@@ -18,3 +18,20 @@ code {
 a {
   color: #61dafb;
 }
+
+.Issue {
+  padding: 4px 8px;
+}
+
+.Issue button {
+  font-size: 1em;
+  color: #61dafb;
+  text-decoration: underline;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.IssueList {
+  margin: 6px 0px;
+}

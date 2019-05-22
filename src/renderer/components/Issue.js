@@ -1,5 +1,4 @@
 import React from 'react';
-import './Issue.css';
 
 const { ipcRenderer } = window.require('electron');
 

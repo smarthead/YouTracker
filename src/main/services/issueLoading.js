@@ -1,5 +1,5 @@
-const { EventEmitter } = require('events');
-const api = require('./api');
+import { EventEmitter } from 'events';
+import api from './api';
 
 let events = new EventEmitter();
 
@@ -14,4 +14,4 @@ const reload = () => {
 
 const getIssues = () => issues;
 
-module.exports = { events, reload, getIssues };
+export default { events, reload, getIssues };

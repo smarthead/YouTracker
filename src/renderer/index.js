@@ -1,9 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-
-const { ipcRenderer } = window.require('electron');
+import { ipcRenderer } from 'electron';
+import App from './components/App';
 
 let appState = { issues: [], activeIssueId: null };
 
