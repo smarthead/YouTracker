@@ -4,7 +4,10 @@ import { ipcRenderer, remote } from 'electron';
 const { Menu } = remote;
 
 const Issue = (props) => {
-  const { id, idReadable, summary, isActive } = props;
+  const {
+    id, idReadable, summary, spentTime,
+    isActive
+  } = props;
 
   const openLink = () => {
     ipcRenderer.send('view-issue', idReadable);
@@ -36,11 +39,11 @@ const Issue = (props) => {
             </button>
         }
         <button onClick={openLink}>{idReadable}</button>
-        <div className="issue__summary">{summary}</div>
+        <div className="issue__summary" title={summary}>{summary}</div>
       </div>
       <div className="issue__right">
         <div className="issue__time">
-          0:00
+          {spentTime !== null ? spentTime.presentation : ''}
         </div>
         <button className="issue__add-button" onClick={add}>
           <i className="fas fa-plus" />

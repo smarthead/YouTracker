@@ -46,14 +46,14 @@ button {
 .issue {
   position: relative;
   padding: 0px 8px;
-  height: 30px;
+  height: 32px;
 }
 
 .issue__left {
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  height: 30px;
+  height: 32px;
 }
 
 .issue__right {
@@ -65,7 +65,7 @@ button {
   top: 0;
   bottom: 0;
   min-width: 120px;
-  height: 30px;
+  height: 32px;
   background: linear-gradient(to right, #282c3400 0%, #282c34ff 40%, #282c34ff 100%);
 }
 
@@ -77,7 +77,7 @@ button {
 
 .issue__start-button {
   visibility: hidden;
-  padding: 3px 6px;
+  padding: 3px 4px;
 }
 
 .issue:hover .issue__start-button {
@@ -85,12 +85,12 @@ button {
 }
 
 .issue__stop-button {
-  padding: 3px 6px;
+  padding: 3px 4px;
 }
 
 .issue__add-button {
   visibility: hidden;
-  padding: 3px 16px 3px 6px;
+  padding: 3px 14px 3px 4px;
 }
 
 .issue:hover .issue__add-button {
@@ -99,6 +99,7 @@ button {
 
 .issue__time {
   color: #666666;
+  font-size: 12px;
   padding: 3px;
   cursor: default;
 }
