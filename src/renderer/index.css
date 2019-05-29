@@ -103,3 +103,31 @@ button {
   padding: 3px;
   cursor: default;
 }
+
+.login {
+  text-align: center;
+  padding-top: 80px;
+}
+
+.login__field {
+  border: none;
+  border-bottom: 1px solid #ffffff66;
+  background-color: #282c34;
+  color: white;
+  font-size: 1em;
+  width: 160px;
+  margin: 8px;
+  padding-bottom: 4px;
+}
+
+.login__field:focus {
+  border-bottom: 1px solid #61dafb;
+}
+
+.login__field::placeholder {
+  color: #ffffff66;
+}
+
+.login__button {
+  margin-top: 14px;
+}

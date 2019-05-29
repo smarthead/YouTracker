@@ -1,9 +1,10 @@
 import { app, BrowserWindow, ipcMain, shell } from 'electron';
 import isDev from './utils/isDev';
-import urls from './urls';
-import core from './core';
+import urls from './services/urls';
+import MainService from './services/MainService';
 
 let mainWindow = null;
+const mainService = new MainService();
 
 const createWindow = () => {
   mainWindow = new BrowserWindow({
@@ -25,7 +26,7 @@ const createWindow = () => {
     // Dereference the window object, usually you would store windows
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
-    mainWindow = null
+    mainWindow = null;
   });
 
   mainWindow.webContents.on('did-finish-load', () => {
@@ -38,7 +39,7 @@ const createWindow = () => {
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
   createWindow();
-  core.initialize();
+  mainService.initialize();
 });
 
 // Quit when all windows are closed.
@@ -60,15 +61,15 @@ app.on('activate', () => {
 
 const sendAppState = () => {
   if (mainWindow === null) return;
-  mainWindow.webContents.send('app-state-updated', core.getState());
+  mainWindow.webContents.send('app-state-updated', mainService.state);
 };
 
 ipcMain.on('start-tracking', (event, issueId) => {
-  core.startTracking(issueId);
+  mainService.startTracking(issueId);
 });
 
 ipcMain.on('stop-tracking', (event, arg) => {
-  core.stopTracking();
+  mainService.stopTracking();
 });
 
 ipcMain.on('view-issue', (event, idReadable) => {
@@ -76,7 +77,11 @@ ipcMain.on('view-issue', (event, idReadable) => {
 });
 
 ipcMain.on('add-work-item', (event, item) => {
-  core.addWorkItem(item);
+  mainService.addWorkItem(item);
 });
 
-core.events.on('changed', sendAppState);
+ipcMain.on('logIn', (event, { login, password }) => {
+  mainService.logIn(login, password);
+});
+
+mainService.on('changed', sendAppState);
