@@ -1,8 +1,10 @@
 import { EventEmitter } from 'events';
 
-class WorkItemService extends EventEmitter {
 
-  // TODO реализовать таймер повторной отправки
+const RETRY_INTERVAL = 2 * 60 * 1000; // 2 minutes
+
+
+class WorkItemService extends EventEmitter {
   
   constructor(apiService) {
     super();
@@ -11,34 +13,64 @@ class WorkItemService extends EventEmitter {
     this.isSending = false;
   }
 
-  commitWorkItem(item) {
-    this.workItems.push(item);
-    this.send();
+  initialize() {
+    // TODO Загрузить отметки из хранилища, когда оно будет реализовано
+    // TODO Отправить неотправленные отметки: this.sendNext();
   }
 
-  send() {
+  destroy() {
+    this.stopTimer();
+  }
+
+  commitWorkItem(item) {
+    this.workItems.push(item);
+    this.sendNext();
+  }
+
+  sendNext() {
     if (this.isSending || this.workItems.length === 0) {
       return;
     }
+    this.stopTimer();
     this.isSending = true;
-  
+
     const item = this.workItems[0];
+
+    console.log(`Posting work item ${item}...`);
     
     this.apiService.postWorkItem(item)
       .then(() => {
-        this.workItems.shift();
+        console.log('Work item posted');
         this.isSending = false;
+
+        this.workItems.shift();
+        
         if (this.workItems.length > 0) {
-          this.send();
+          this.sendNext();
         } else {
           this.emit('all-sent');
         }
       })
       .catch((error) =>{
-        console.error(`Work item posting error: ${error}`);
+        console.error('Work item posting error:', error);
         this.isSending = false;
+        this.startTimer();
       });
-  };
+  }
+
+  startTimer() {
+    this.timer = setTimeout(() => {
+      this.timer = null;
+      this.sendNext();
+    }, RETRY_INTERVAL);
+  }
+
+  stopTimer() {
+    if (this.timer) {
+      clearTimeout(this.timer);
+      this.timer = null;
+    }
+  }
 }
 
 export default WorkItemService;
