@@ -41,14 +41,14 @@ class AuthService extends EventEmitter {
       try {
         await this.refreshAccessToken();
       } catch {
-        this.unauthorize();
+        await this.unauthorize();
         throw new Error('Unauthorized');
       }
       
       const response = await makeFetch();
       
       if (response.status === 401) {
-        this.unauthorize();
+        await this.unauthorize();
         throw new Error('Unauthorized');
       }
       
@@ -83,6 +83,10 @@ class AuthService extends EventEmitter {
     await this.setRefreshToken(refresh_token);
     
     console.log('Login succeeded');
+  }
+
+  async logOut() {
+    await this.unauthorize();
   }
   
   // Private
