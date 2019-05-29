@@ -25,6 +25,10 @@ class ApiService extends EventEmitter {
   async logIn(login, password) {
     await this.authService.logIn(login, password);
   }
+  
+  async logOut() {
+    await this.authService.logOut();
+  }
 
   async getIssues() {
     const response = await this.authService.authorizedFetch(urls.getIssues, {

@@ -31,6 +31,10 @@ class MainService extends EventEmitter {
     this.createSession();
   }
 
+  async logOut() {
+    await this.apiService.logOut();
+  }
+
   startTracking(issueId) {
     if (this.session) {
       this.session.trackingService.start(issueId);

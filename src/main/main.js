@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, shell } from 'electron';
+import { app, BrowserWindow, ipcMain, shell, Menu } from 'electron';
 import isDev from './utils/isDev';
 import urls from './services/urls';
 import MainService from './services/MainService';
@@ -21,47 +21,38 @@ const createWindow = () => {
   
   mainWindow.loadFile('build/renderer/index.html');
 
-  // Emitted when the window is closed.
   mainWindow.on('closed', () => {
-    // Dereference the window object, usually you would store windows
-    // in an array if your app supports multi windows, this is the time
-    // when you should delete the corresponding element.
     mainWindow = null;
   });
 
   mainWindow.webContents.on('did-finish-load', () => {
-    sendAppState();
+    sendAppState(mainService.state);
   });
 }
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
 app.on('ready', () => {
   createWindow();
+  updateMenu(mainService.state);
   mainService.initialize();
 });
 
-// Quit when all windows are closed.
 app.on('window-all-closed', () => {
-  // On macOS it is common for applications and their menu bar
-  // to stay active until the user quits explicitly with Cmd + Q
+  // macOS
   if (process.platform !== 'darwin') {
     app.quit();
   }
 });
 
 app.on('activate', () => {
-  // On macOS it's common to re-create a window in the app when the
-  // dock icon is clicked and there are no other windows open.
+  // macOS
   if (mainWindow === null) {
     createWindow();
   }
 });
 
-const sendAppState = () => {
+const sendAppState = (appState) => {
   if (mainWindow === null) return;
-  mainWindow.webContents.send('app-state-updated', mainService.state);
+  mainWindow.webContents.send('app-state-updated', appState);
 };
 
 ipcMain.on('start-tracking', (event, issueId) => {
@@ -84,4 +75,25 @@ ipcMain.on('logIn', (event, { login, password }) => {
   mainService.logIn(login, password);
 });
 
-mainService.on('changed', sendAppState);
+mainService.on('changed', () => {
+  const state = mainService.state;
+  sendAppState(state);
+  updateMenu(state);
+});
+
+const updateMenu = (appState) => {
+  // TODO Разное меню для разных ОС. Локализация
+  Menu.setApplicationMenu(Menu.buildFromTemplate([
+    { role: 'appMenu' },
+    { role: 'editMenu' },
+    {
+      label: 'Account',
+      submenu: [
+        {
+          label: 'Log out',
+          enabled: appState.isAuthorized,
+          click: () => mainService.logOut()}
+      ],
+    }
+  ]));
+};
