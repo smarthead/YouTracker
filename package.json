@@ -5,6 +5,7 @@
   "main": "build/main/main.js",
   "scripts": {
     "build": "babel src --out-dir build --copy-files",
+    "rebuild-native": "./node_modules/.bin/electron-rebuild",
     "start": "npm run build && electron .",
     "pack": "npm run build && build -c.extraMetadata.main=build/main/main.js"
   },
@@ -17,9 +18,11 @@
     "@babel/preset-env": "^7.4.4",
     "@babel/preset-react": "^7.0.0",
     "electron": "^5.0.1",
-    "electron-builder": "^20.40.2"
+    "electron-builder": "^20.40.2",
+    "electron-rebuild": "^1.8.5"
   },
   "dependencies": {
+    "keytar": "^4.9.0",
     "node-fetch": "^2.6.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6"
