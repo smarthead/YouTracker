@@ -3,7 +3,19 @@ import fetch from 'node-fetch';
 import keytar from 'keytar';
 import urls from './urls';
 
+
+// base64(service_id:service_secret)
+const SERVICE_AUTHORIZATION = 'NDZiN2Q5OGItODk0Ni00OGI1LWI0NjYtYjdhYjM4ZjRkYWM4OnkxUTR6RGRoY0s=';
+
+// id of YouTrack Service
+const YOUTRACK_SCOPE = '03499c9a-a075-4deb-9f01-8cc69fe5c959';
+
+// Secure storage service name
+const STORAGE_SERVICE = 'youtracker';
+
+
 class AuthService extends EventEmitter {
+
   constructor() {
     super();
     this.accessToken = null;
@@ -61,11 +73,11 @@ class AuthService extends EventEmitter {
   async logIn(login, password) {
     console.log('Logging in...');
     
-    const body = `grant_type=password&username=${login}&password=${password}&scope=${youTrackScope}&access_type=offline`;
+    const body = `grant_type=password&username=${login}&password=${password}&scope=${YOUTRACK_SCOPE}&access_type=offline`;
     
     const response = await fetch(urls.oauth, {
       headers: {
-        'Authorization': `Basic ${serviceAuthorization}`,
+        'Authorization': `Basic ${SERVICE_AUTHORIZATION}`,
         'Content-Type': 'application/x-www-form-urlencoded'
       },
       method: 'POST',
@@ -99,11 +111,11 @@ class AuthService extends EventEmitter {
     
     console.log('Refreshing token...');
     
-    const body = `grant_type=refresh_token&refresh_token=${refreshToken}&scope=${youTrackScope}`;
+    const body = `grant_type=refresh_token&refresh_token=${refreshToken}&scope=${YOUTRACK_SCOPE}`;
     
     const response = await fetch(urls.oauth, {
       headers: {
-        'Authorization': `Basic ${serviceAuthorization}`,
+        'Authorization': `Basic ${SERVICE_AUTHORIZATION}`,
         'Content-Type': 'application/x-www-form-urlencoded'
       },
       method: 'POST',
@@ -129,37 +141,28 @@ class AuthService extends EventEmitter {
   
   async setAccessToken(accessToken) {
     this.accessToken = accessToken;
-    await keytar.setPassword(keytarService, 'accessToken', accessToken);
+    await keytar.setPassword(STORAGE_SERVICE, 'accessToken', accessToken);
   }
   
   async setRefreshToken(refreshToken) {
     this.refreshToken = refreshToken;
-    await keytar.setPassword(keytarService, 'refreshToken', refreshToken);
+    await keytar.setPassword(STORAGE_SERVICE, 'refreshToken', refreshToken);
   }
   
   async loadTokens() {
-    this.accessToken = await keytar.getPassword(keytarService, 'accessToken');
-    this.refreshToken = await keytar.getPassword(keytarService, 'refreshToken');
+    this.accessToken = await keytar.getPassword(STORAGE_SERVICE, 'accessToken');
+    this.refreshToken = await keytar.getPassword(STORAGE_SERVICE, 'refreshToken');
   }
   
   async unauthorize() {
     this.accessToken = null;
     this.refreshToken = null;
     
-    await keytar.deletePassword(keytarService, 'accessToken');
-    await keytar.deletePassword(keytarService, 'refreshToken');
+    await keytar.deletePassword(STORAGE_SERVICE, 'accessToken');
+    await keytar.deletePassword(STORAGE_SERVICE, 'refreshToken');
     
     this.emit('unauthorized');
   }
 }
-
-// base64(service_id:service_secret)
-const serviceAuthorization = 'NDZiN2Q5OGItODk0Ni00OGI1LWI0NjYtYjdhYjM4ZjRkYWM4OnkxUTR6RGRoY0s=';
-
-// id of YouTrack Service
-const youTrackScope = '03499c9a-a075-4deb-9f01-8cc69fe5c959';
-
-// Secure storage service name
-const keytarService = 'youtracker';
 
 export default AuthService;

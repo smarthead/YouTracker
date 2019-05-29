@@ -1,9 +1,11 @@
 import { EventEmitter } from 'events';
 import parseIssues from './parseIssues';
 
-class IssueService extends EventEmitter {
 
-  // TODO реализовать таймер периодической загрузки задач
+const RELOAD_INTERVAL = 2 * 60 * 1000; // 2 minutes
+
+
+class IssueService extends EventEmitter {
 
   constructor(apiService) {
     super();
@@ -15,13 +17,43 @@ class IssueService extends EventEmitter {
     return this._issues;
   }
 
-  reload() {
-    this.apiService.getIssues()
-      .then(parseIssues)
-      .then(issues => {
-        this._issues = issues;
-        this.emit('changed', issues);
-      });
+  initialize() {
+    this.startTimer();
+  }
+
+  destroy() {
+    this.stopTimer();
+  }
+
+  async reload() {
+    try {
+      console.log('Reloading issues...');
+
+      this._issues = parseIssues(
+        await this.apiService.getIssues()
+      );
+      this.emit('changed');
+
+      console.log(`${this._issues.length} issues loaded`);
+    } catch(error) {
+      console.error('Issues loading error:', error);
+    }
+  }
+
+  async startTimer() {
+    await this.reload();
+    
+    this.timer = setTimeout(async () => {
+      this.timer = null;
+      await this.startTimer();
+    }, RELOAD_INTERVAL);
+  }
+
+  stopTimer() {
+    if (this.timer) {
+      clearTimeout(this.timer);
+      this.timer = null;
+    }
   }
 }
 
