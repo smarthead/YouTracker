@@ -53,6 +53,12 @@ class MainService extends EventEmitter {
     }
   }
 
+  reloadIssues() {
+    if (this.session) {
+      this.session.issueService.reload();
+    }
+  }
+
   get state() {
     return {
       isAuthorized: this.apiService.isAuthorized,

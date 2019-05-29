@@ -94,6 +94,16 @@ const updateMenu = (appState) => {
           enabled: appState.isAuthorized,
           click: () => mainService.logOut()}
       ],
+    },
+    {
+      label: 'Issues',
+      submenu: [
+        {
+          label: 'Reload',
+          enabled: appState.isAuthorized,
+          click: () => mainService.reloadIssues()
+        }
+      ],
     }
   ]));
 };
