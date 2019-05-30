@@ -3,36 +3,38 @@ import TrackingService from './TrackingService';
 import IssueService from './IssueService';
 import WorkItemService from './WorkItemService';
 import ApiService from './ApiService';
+import AuthService from './AuthService';
 
 class MainService extends EventEmitter {
 
   constructor() {
     super();
-    this.apiService = new ApiService();
+    this.authService = new AuthService();
+    this.apiService = new ApiService(this.authService);
     this.session = null;
   }
 
   // Public
 
   async initialize() {
-    this.apiService.on('unauthorized', () => {
+    this.authService.on('unauthorized', () => {
       this.destroySession();
     });
 
-    await this.apiService.initialize();
+    await this.authService.initialize();
 
-    if (this.apiService.isAuthorized) {
+    if (this.authService.isAuthorized) {
       this.createSession();
     }
   }
 
   async logIn(login, password) {
-    await this.apiService.logIn(login, password);
+    await this.authService.logIn(login, password);
     this.createSession();
   }
 
   async logOut() {
-    await this.apiService.logOut();
+    await this.authService.logOut();
   }
 
   startTracking(issueId) {
@@ -61,7 +63,7 @@ class MainService extends EventEmitter {
 
   get state() {
     return {
-      isAuthorized: this.apiService.isAuthorized,
+      isAuthorized: this.authService.isAuthorized,
       state: this.session ? {
         issues: this.session.issueService.issues,
         activeIssueId: this.session.trackingService.activeIssueId

@@ -1,33 +1,9 @@
-import { EventEmitter } from 'events';
-import fetch from 'node-fetch';
 import urls from './urls';
-import AuthService from './AuthService';
 
-class ApiService extends EventEmitter {
+class ApiService {
 
-  constructor() {
-    super();
-    this.authService = new AuthService();
-
-    this.authService.on('unauthorized', () => {
-      this.emit('unauthorized');
-    });
-  }
-
-  get isAuthorized() {
-    return this.authService.isAuthorized;
-  }
-
-  async initialize() {
-    await this.authService.initialize();
-  }
-
-  async logIn(login, password) {
-    await this.authService.logIn(login, password);
-  }
-  
-  async logOut() {
-    await this.authService.logOut();
+  constructor(authService) {
+    this.authService = authService;
   }
 
   async getIssues() {

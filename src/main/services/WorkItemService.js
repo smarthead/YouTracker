@@ -36,7 +36,7 @@ class WorkItemService extends EventEmitter {
 
     const item = this.workItems[0];
 
-    console.log(`Posting work item ${item}...`);
+    console.log('Posting work item', item, '...');
     
     this.apiService.postWorkItem(item)
       .then(() => {
