@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events';
-
+import store from './store';
 
 const RETRY_INTERVAL = 2 * 60 * 1000; // 2 minutes
 
@@ -13,9 +13,11 @@ class WorkItemService extends EventEmitter {
     this.isSending = false;
   }
 
+  // Public
+
   initialize() {
-    // TODO Загрузить отметки из хранилища, когда оно будет реализовано
-    // TODO Отправить неотправленные отметки: this.sendNext();
+    this.restoreWorkItems();
+    this.sendNext();
   }
 
   destroy() {
@@ -24,8 +26,12 @@ class WorkItemService extends EventEmitter {
 
   commitWorkItem(item) {
     this.workItems.push(item);
+    this.storeWorkItems();
+
     this.sendNext();
   }
+
+  // Private
 
   sendNext() {
     if (this.isSending || this.workItems.length === 0) {
@@ -44,7 +50,8 @@ class WorkItemService extends EventEmitter {
         this.isSending = false;
 
         this.workItems.shift();
-        
+        this.storeWorkItems();
+
         if (this.workItems.length > 0) {
           this.sendNext();
         } else {
@@ -69,6 +76,18 @@ class WorkItemService extends EventEmitter {
     if (this.timer) {
       clearTimeout(this.timer);
       this.timer = null;
+    }
+  }
+
+  storeWorkItems() {
+    store.set('workItems', this.workItems);
+  }
+
+  restoreWorkItems() {
+    const workItems = store.get('workItems');
+    if (workItems) {
+      this.workItems = workItems;
+      console.log(`${workItems.length} work items restored`);
     }
   }
 }
