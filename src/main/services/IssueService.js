@@ -1,5 +1,6 @@
 import { EventEmitter } from 'events';
 import parseIssues from './parseIssues';
+import store from './store';
 
 
 const RELOAD_INTERVAL = 2 * 60 * 1000; // 2 minutes
@@ -13,11 +14,14 @@ class IssueService extends EventEmitter {
     this._issues = [];
   }
 
+  // Public
+
   get issues() {
     return this._issues;
   }
 
   initialize() {
+    this.restoreIssues();
     this.startTimer();
   }
 
@@ -32,6 +36,8 @@ class IssueService extends EventEmitter {
       this._issues = parseIssues(
         await this.apiService.getIssues()
       );
+      this.storeIssues();
+      
       this.emit('changed');
 
       console.log(`${this._issues.length} issues loaded`);
@@ -39,6 +45,8 @@ class IssueService extends EventEmitter {
       console.error('Issues loading error:', error);
     }
   }
+
+  // Private
 
   async startTimer() {
     await this.reload();
@@ -53,6 +61,18 @@ class IssueService extends EventEmitter {
     if (this.timer) {
       clearTimeout(this.timer);
       this.timer = null;
+    }
+  }
+
+  storeIssues() {
+    store.set('issues', this._issues);
+  }
+
+  restoreIssues() {
+    const issues = store.get('issues');
+    if (issues) {
+      this._issues = issues;
+      console.log(`${issues.length} issues restored`);
     }
   }
 }
