@@ -12,6 +12,7 @@ const createWindow = () => {
     height: 600,
     backgroundColor: "#282c34",
     acceptFirstMouse: true,
+    titleBarStyle: "hidden", // macOS
     webPreferences: {
       nodeIntegration: true,
       scrollBounce: true,
@@ -81,8 +82,11 @@ mainService.on('changed', () => {
   updateMenu(state);
 });
 
+// TODO:
+// - Вынести в отдельный файл
+// - Для разных ОС — разное меню. Например, appMenu — только на macOS
+// - Локализовать — написать по-русски, сделать чтобы системные меню были на русском
 const updateMenu = (appState) => {
-  // TODO Разное меню для разных ОС. Локализация
   Menu.setApplicationMenu(Menu.buildFromTemplate([
     { role: 'appMenu' },
     { role: 'editMenu' },
@@ -92,7 +96,8 @@ const updateMenu = (appState) => {
         {
           label: 'Log out',
           enabled: appState.isAuthorized,
-          click: () => mainService.logOut()}
+          click: () => mainService.logOut()
+        }
       ],
     },
     {

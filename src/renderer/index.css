@@ -8,6 +8,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  -webkit-app-region: drag;
 }
 
 code {
@@ -23,6 +24,7 @@ code {
 
 input, button, textarea, :focus {
   outline: none;
+  -webkit-app-region: no-drag;
 }
 
 a {
@@ -40,7 +42,7 @@ button {
 }
 
 .issueList {
-  margin: 8px 0px;
+  margin: 24px 0px 8px 0px;
 }
 
 .issue {
