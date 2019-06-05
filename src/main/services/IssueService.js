@@ -3,7 +3,7 @@ import parseIssues from './parseIssues';
 import store from './store';
 
 
-const RELOAD_INTERVAL = 2 * 60 * 1000; // 2 minutes
+const AUTORELOAD_INTERVAL = 2 * 60 * 1000; // 2 minutes
 
 
 class IssueService extends EventEmitter {
@@ -31,7 +31,17 @@ class IssueService extends EventEmitter {
 
   async reload() {
     try {
-      console.log('Reloading issues...');
+      await this.loadIssues();
+    } catch {
+      console.log('Issues reloading failed');
+    }
+  }
+
+  // Private
+
+  async loadIssues() {
+    try {
+      console.log('Loading issues...');
 
       this._issues = parseIssues(
         await this.apiService.getIssues()
@@ -41,20 +51,25 @@ class IssueService extends EventEmitter {
       this.emit('changed');
 
       console.log(`${this._issues.length} issues loaded`);
+
     } catch(error) {
       console.error('Issues loading error:', error);
+      throw error;
     }
   }
 
-  // Private
-
   async startTimer() {
-    await this.reload();
-    
-    this.timer = setTimeout(async () => {
-      this.timer = null;
-      await this.startTimer();
-    }, RELOAD_INTERVAL);
+    try {
+      await this.loadIssues();
+      
+      this.timer = setTimeout(async () => {
+        this.timer = null;
+        await this.startTimer();
+      }, AUTORELOAD_INTERVAL);
+
+    } catch {
+      console.log('Issues autoreloading failed');
+    }
   }
 
   stopTimer() {
