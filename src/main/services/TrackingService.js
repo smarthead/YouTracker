@@ -5,42 +5,49 @@ class TrackingService extends EventEmitter {
   constructor(workItemService) {
     super();
     this.workItemService = workItemService;
-    this.activeTracking = null;
+    this._current = null;
   }
 
-  get activeIssueId() {
-    return this.activeTracking ? this.activeTracking.issueId : null;
+  get current() {
+    return this._current;
   }
 
-  start(issueId) {
-    if (this.activeTracking) stop();
+  start(issue) {
+    if (this._current) this.stop();
 
-    this.activeTracking = {
-      issueId,
-      startTime: new Date()
+    this._current = {
+      issue,
+      isActive: true,
+      startTime: new Date(),
+      endTime: null
     };
+
+    console.log(`Start tracking issue ${issue.idReadable} (${issue.id})`);
 
     this.emit('changed');
   }
 
   stop() {
-    if (this.activeTracking === null) return;
+    if (this._current === null || this._current.endTime !== null) {
+      return;
+    }
 
-    const { issueId, startTime } = this.activeTracking;
+    const { issue, startTime } = this._current;
     const endTime = new Date();
     const time = endTime.getTime() - startTime.getTime();
     const minutes = Math.ceil(time / 1000 / 60);
 
+    this._current.endTime = endTime;
+    this._current.isActive = false;
+
     if (time > 30000) {
-      console.log(`Tracked ${time} ms (${minutes} m) in task ${issueId}`);
+      console.log(`Tracked ${time} ms (${minutes} m) in issue ${issue.idReadable} (${issue.id})`);
       this.workItemService.commitWorkItem({
-        issueId, date: endTime.getTime(), minutes
+        issueId: issue.id, date: endTime.getTime(), minutes
       });
     } else {
-      console.log(`Work item is too short (${time} ms)`);
+      console.log(`Work item is too short (${time} ms) in issue ${issue.idReadable} (${issue.id})`);
     }
-
-    this.activeTracking = null;
 
     this.emit('changed');
   }
@@ -50,6 +57,13 @@ class TrackingService extends EventEmitter {
     this.workItemService.commitWorkItem({
       issueId, date: today.getTime(), minutes
     });
+  }
+
+  updateIssue(issue) {
+    if (!this._current || this._current.issue.id !== issue.id) {
+      return;
+    }
+    this._current.issue = issue;
   }
 }
 

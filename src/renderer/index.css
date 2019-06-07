@@ -8,7 +8,6 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  -webkit-app-region: drag;
 }
 
 code {
@@ -24,7 +23,6 @@ code {
 
 input, button, textarea, :focus {
   outline: none;
-  -webkit-app-region: no-drag;
 }
 
 a {
@@ -34,20 +32,94 @@ a {
 button {
   font-size: 1em;
   color: #61dafb;
-  text-decoration: underline;
   border: none;
   background: transparent;
   cursor: pointer;
   white-space: nowrap;
 }
 
+button:disabled {
+  color: #61dafb99;
+  cursor: default;
+}
+
+.toolbar {
+  background-color: #282c34;
+  border-bottom: 1px solid #ffffff11;
+  position: fixed;
+  padding: 10px 16px 8px 10px;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 32px;
+  z-index: 1000;
+}
+
+.toolbar__left {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  height: 32px;
+}
+
+.toolbar__right {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  position: absolute;
+  right: 16px;
+  top: 10px;
+  height: 32px;
+  padding-left: 10px;
+  background: linear-gradient(to right, #282c3400 0%, #282c34ff 10px, #282c34ff 100%);
+}
+
+.toolbar__summary {
+  overflow: hidden;
+  white-space: nowrap;
+  cursor: default;
+}
+
+.toolbar__empty-summary {
+  overflow: hidden;
+  white-space: nowrap;
+  cursor: default;
+  color: #999999;
+  padding-left: 8px;
+}
+
+.toolbar__start-stop-button {
+  font-size: 1.5em;
+}
+
+.toolbar__timer {
+  font-size: 1.7em;
+  margin-left: 8px;
+  margin-right: 8px;
+}
+
+.toolbar__timer--disabled {
+  color: #999999;
+  font-size: 1.7em;
+  margin-left: 8px;
+  margin-right: 8px;
+}
+
+.spent-time {
+  color: #666666;
+  font-size: 12px;
+  padding: 3px;
+  cursor: default;
+}
+
 .issueList {
-  margin: 24px 0px 8px 0px;
+  padding-top: 58px;
+  padding-bottom: 8px;
 }
 
 .issue {
   position: relative;
-  padding: 0px 8px;
+  padding: 0 16px 0 8px;
   height: 32px;
 }
 
@@ -63,12 +135,12 @@ button {
   justify-content: flex-end;
   align-items: center;
   position: absolute;
-  right: 0;
+  right: 16px;
   top: 0;
   bottom: 0;
-  min-width: 120px;
   height: 32px;
-  background: linear-gradient(to right, #282c3400 0%, #282c34ff 40%, #282c34ff 100%);
+  padding-left: 10px;
+  background: linear-gradient(to right, #282c3400 0%, #282c34ff 10px, #282c34ff 100%);
 }
 
 .issue__summary {
@@ -88,22 +160,6 @@ button {
 
 .issue__stop-button {
   padding: 3px 4px;
-}
-
-.issue__add-button {
-  visibility: hidden;
-  padding: 3px 14px 3px 4px;
-}
-
-.issue:hover .issue__add-button {
-  visibility: visible;
-}
-
-.issue__time {
-  color: #666666;
-  font-size: 12px;
-  padding: 3px;
-  cursor: default;
 }
 
 .login {
@@ -132,4 +188,18 @@ button {
 
 .login__button {
   margin-top: 14px;
+}
+
+.colon {
+  opacity: 1;
+}
+
+.colon--active {
+  animation: blink 1s step-start 0s infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
 }

@@ -10,9 +10,9 @@ const createWindow = () => {
   mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
+    minWidth: 200,
     backgroundColor: "#282c34",
     acceptFirstMouse: true,
-    titleBarStyle: "hidden", // macOS
     webPreferences: {
       nodeIntegration: true,
       scrollBounce: true,

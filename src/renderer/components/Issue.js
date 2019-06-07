@@ -1,5 +1,6 @@
 import React from 'react';
-import { ipcRenderer, remote } from 'electron';
+import { remote, clipboard } from 'electron';
+import ipc from '../ipc';
 
 const { Menu } = remote;
 
@@ -8,63 +9,61 @@ const Issue = (props) => {
     id, idReadable, summary, spentTime,
     isActive
   } = props;
-
-  const openLink = () => {
-    ipcRenderer.send('view-issue', idReadable);
-  };
-
-  const startTracking = () => {
-    ipcRenderer.send('start-tracking', id);
-  };
-
-  const stopTracking = () => {
-    ipcRenderer.send('stop-tracking');
-  };
-
-  const add = () => {
-    const menu = contextMenuForAdd(id);
+  
+  const onContextMenu = (event) => {
+    event.preventDefault();
+    const menu = makeContextMenu(id, idReadable, summary);
     menu.popup();
   };
-  
+
   return (
-    <div className="issue">
+    <div className="issue" onContextMenu={onContextMenu}>
       <div className="issue__left">
         {
           isActive
-          ? <button className="issue__stop-button" onClick={stopTracking}>
-              <i className="fas fa-stop" />
+          ? <button className="issue__stop-button" onClick={ipc.stopTracking}>
+              <i className="fas fa-pause" />
             </button>
-          : <button className="issue__start-button" onClick={startTracking}>
+          : <button className="issue__start-button" onClick={ipc.startTracking(id)}>
               <i className="fas fa-play" />
             </button>
         }
-        <button onClick={openLink}>{idReadable}</button>
+        <button onClick={ipc.openLink(idReadable)}>{idReadable}</button>
         <div className="issue__summary" title={summary}>{summary}</div>
       </div>
       <div className="issue__right">
-        <div className="issue__time">
-          {spentTime !== null ? spentTime.presentation : ''}
+        <div className="spent-time">
+          {spentTime ? spentTime.presentation : ''}
         </div>
-        <button className="issue__add-button" onClick={add}>
-          <i className="fas fa-plus" />
-        </button>
       </div>
     </div>
   );
 };
 
-const contextMenuForAdd = (issueId) => {
-  const add = (minutes) => {
-    ipcRenderer.send('add-work-item', { issueId, minutes });
-  };
+const makeContextMenu = (id, idReadable, summary) => {
+  const add = (minutes) => ipc.addWorkItem(id, minutes);
 
   return Menu.buildFromTemplate([
-    { label: '5m', click: () => add(5) },
-    { label: '10m', click: () => add(10) },
-    { label: '15m', click: () => add(15) },
-    { label: '30m', click: () => add(30) },
-    { label: '1h', click: () => add(60) },
-    { label: '2h', click: () => add(120) }
+    {
+      label: 'Копировать ID и название',
+      click: () => clipboard.writeText(`${idReadable} ${summary}`)
+    },
+    {
+      label: 'Открыть',
+      click: ipc.openLink(idReadable)
+    },
+    { type: 'separator' },
+    {
+      label: 'Добавить время',
+      submenu: [
+        { label: '5m', click: add(5) },
+        { label: '10m', click: add(10) },
+        { label: '15m', click: add(15) },
+        { label: '30m', click: add(30) },
+        { label: '1h', click: add(60) },
+        { label: '2h', click: add(120) }
+      ]
+    }
   ]);
 };
 
