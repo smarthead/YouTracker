@@ -12,6 +12,7 @@ class IssueService extends EventEmitter {
     super();
     this.apiService = apiService;
     this._issues = [];
+    this.destroyed = false;
   }
 
   // Public
@@ -27,19 +28,10 @@ class IssueService extends EventEmitter {
 
   destroy() {
     this.stopTimer();
+    this.destroyed = true;
   }
 
   async reload() {
-    try {
-      await this.loadIssues();
-    } catch {
-      console.log('Issues reloading failed');
-    }
-  }
-
-  // Private
-
-  async loadIssues() {
     try {
       console.log('Loading issues...');
 
@@ -54,22 +46,20 @@ class IssueService extends EventEmitter {
 
     } catch(error) {
       console.error('Issues loading error:', error);
-      throw error;
     }
   }
 
-  async startTimer() {
-    try {
-      await this.loadIssues();
-      
-      this.timer = setTimeout(async () => {
-        this.timer = null;
-        await this.startTimer();
-      }, AUTORELOAD_INTERVAL);
+  // Private
 
-    } catch {
-      console.log('Issues autoreloading failed');
-    }
+  async startTimer() {
+    await this.reload();
+    
+    if (this.destroyed) return;
+
+    this.timer = setTimeout(async () => {
+      this.timer = null;
+      await this.startTimer();
+    }, AUTORELOAD_INTERVAL);
   }
 
   stopTimer() {
