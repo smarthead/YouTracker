@@ -1,15 +1,19 @@
 import React from 'react';
 import IssueList from './IssueList';
 import Login from './Login';
+import Toolbar from './Toolbar';
 
 const App = (props) => {
-  const { appState } = props
+  const { appState } = props;
 
   return (
     <div>
       {
         appState.isAuthorized
-        ? <IssueList { ...appState.state }/>
+        ? <div>
+            <Toolbar { ...appState.state }/>
+            <IssueList { ...appState.state } />
+          </div>
         : <Login />
       }
     </div>

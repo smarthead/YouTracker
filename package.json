@@ -36,6 +36,9 @@
     ],
     "directories": {
       "buildResources": "assets"
+    },
+    "mac": {
+      "darkModeSupport": true
     }
   }
 }

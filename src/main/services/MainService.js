@@ -39,7 +39,14 @@ class MainService extends EventEmitter {
 
   startTracking(issueId) {
     if (this.session) {
-      this.session.trackingService.start(issueId);
+      const { issueService, trackingService } = this.session;
+
+      const issue = issueService.issues.find(
+        issue => issue.id === issueId
+      );
+      if (issue) {
+        trackingService.start(issue);
+      }
     }
   }
   
@@ -66,7 +73,7 @@ class MainService extends EventEmitter {
       isAuthorized: this.authService.isAuthorized,
       state: this.session ? {
         issues: this.session.issueService.issues,
-        activeIssueId: this.session.trackingService.activeIssueId
+        current: this.session.trackingService.current
       } : null
     };
   }
@@ -85,6 +92,14 @@ class MainService extends EventEmitter {
     });
     
     issueService.on('changed', () => {
+      if (trackingService.current) {
+        const issue = issueService.issues.find(
+          issue => issue.id === trackingService.current.issue.id
+        );
+        if (issue) {
+          trackingService.updateIssue(issue);
+        }
+      }
       this.dispatchChanges();
     });
     

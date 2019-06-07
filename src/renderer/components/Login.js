@@ -28,7 +28,7 @@ const Login = () => {
           placeholder="Логин"
           value={login}
           onChange={handleLoginChange}
-          autoFocus="true"
+          autoFocus={true}
         />
         <br/>
         <input
