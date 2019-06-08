@@ -1,14 +1,18 @@
 import { EventEmitter } from 'events';
 import store from './store';
 
+
 const RETRY_INTERVAL = 2 * 60 * 1000; // 2 minutes
 
 
 class WorkItemService extends EventEmitter {
   
-  constructor(apiService) {
+  constructor(apiService, userId) {
     super();
+
     this.apiService = apiService;
+    this.userId = userId;
+
     this.workItems = [];
     this.isSending = false;
   }
@@ -80,11 +84,11 @@ class WorkItemService extends EventEmitter {
   }
 
   storeWorkItems() {
-    store.set('workItems', this.workItems);
+    store.set(`workItems-${this.userId}`, this.workItems);
   }
 
   restoreWorkItems() {
-    const workItems = store.get('workItems');
+    const workItems = store.get(`workItems-${this.userId}`);
     if (workItems) {
       this.workItems = workItems;
       console.log(`${workItems.length} work items restored`);

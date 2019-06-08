@@ -24,13 +24,13 @@ class MainService extends EventEmitter {
     await this.authService.initialize();
 
     if (this.authService.isAuthorized) {
-      this.createSession();
+      this.createSession(this.authService.userId);
     }
   }
 
   async logIn(login, password) {
     await this.authService.logIn(login, password);
-    this.createSession();
+    this.createSession(this.authService.userId);
   }
 
   async logOut() {
@@ -80,11 +80,11 @@ class MainService extends EventEmitter {
 
   // Private
 
-  createSession() {
+  createSession(userId) {
     if (this.session) return;
 
-    const issueService = new IssueService(this.apiService);
-    const workItemService = new WorkItemService(this.apiService);
+    const issueService = new IssueService(this.apiService, userId);
+    const workItemService = new WorkItemService(this.apiService, userId);
     const trackingService = new TrackingService(workItemService);
 
     trackingService.on('changed', () => {
