@@ -8,9 +8,12 @@ const AUTORELOAD_INTERVAL = 2 * 60 * 1000; // 2 minutes
 
 class IssueService extends EventEmitter {
 
-  constructor(apiService) {
+  constructor(apiService, userId) {
     super();
+    
     this.apiService = apiService;
+    this.userId = userId;
+
     this._issues = [];
     this.destroyed = false;
   }
@@ -70,11 +73,11 @@ class IssueService extends EventEmitter {
   }
 
   storeIssues() {
-    store.set('issues', this._issues);
+    store.set(`issues-${this.userId}`, this._issues);
   }
 
   restoreIssues() {
-    const issues = store.get('issues');
+    const issues = store.get(`issues-${this.userId}`);
     if (issues) {
       this._issues = issues;
       console.log(`${issues.length} issues restored`);
