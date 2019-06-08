@@ -45,11 +45,13 @@ const Toolbar = ({ current }) => {
           {isActive ? <i className="fas fa-pause" /> : <i className="fas fa-play" />}
         </button>
 
-        <div className={disabled ? 'toolbar__timer--disabled' : 'toolbar__timer'}>
-          {time.hours}
-          <span className={isActive ? 'colon--active' : 'colon'}>:</span>
-          {time.minutes}
-        </div>
+        {
+          isActive
+          ? <div className="toolbar__timer">
+              {time.hours}<span className="colon--active">:</span>{time.minutes}
+            </div>
+          : ''
+        }
         
         {idReadable ? <button onClick={ipc.openLink(idReadable)}>{idReadable}</button> : ''}
 
