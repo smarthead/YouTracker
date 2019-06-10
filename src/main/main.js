@@ -12,7 +12,6 @@ const createWindow = () => {
     height: 600,
     minWidth: 200,
     backgroundColor: "#282c34",
-    acceptFirstMouse: true,
     webPreferences: {
       nodeIntegration: true,
       scrollBounce: true,
