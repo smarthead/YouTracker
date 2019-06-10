@@ -109,6 +109,7 @@ class MainService extends EventEmitter {
 
     issueService.initialize();
     workItemService.initialize();
+    trackingService.initialize();
 
     this.session = { issueService, workItemService, trackingService };
     this.dispatchChanges();
@@ -119,6 +120,7 @@ class MainService extends EventEmitter {
 
     this.session.issueService.destroy();
     this.session.workItemService.destroy();
+    this.session.trackingService.destroy();
 
     this.session = null;
     this.dispatchChanges();
