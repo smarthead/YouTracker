@@ -38,6 +38,10 @@ class TrackingService extends EventEmitter {
     }
   }
 
+  destroy() {
+    if (this._current) this.stop();
+  }
+
   start(issue) {
     if (this._current) this.stop();
 

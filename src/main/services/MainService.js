@@ -120,6 +120,7 @@ class MainService extends EventEmitter {
 
     this.session.issueService.destroy();
     this.session.workItemService.destroy();
+    this.session.trackingService.destroy();
 
     this.session = null;
     this.dispatchChanges();
