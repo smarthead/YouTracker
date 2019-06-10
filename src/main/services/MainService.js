@@ -109,6 +109,7 @@ class MainService extends EventEmitter {
 
     issueService.initialize();
     workItemService.initialize();
+    trackingService.initialize();
 
     this.session = { issueService, workItemService, trackingService };
     this.dispatchChanges();

@@ -1,10 +1,18 @@
 import { EventEmitter } from 'events';
+import TrackingRecoveryService from './TrackingRecoveryService';
+
+
+const MIN_DURATION = 30 * 1000; // 30 s
+
 
 class TrackingService extends EventEmitter {
 
   constructor(workItemService) {
     super();
+
     this.workItemService = workItemService;
+    this.recoveryService = new TrackingRecoveryService();
+
     this._current = null;
   }
 
@@ -12,15 +20,37 @@ class TrackingService extends EventEmitter {
     return this._current;
   }
 
+  async initialize() {
+    const recoverItem = await this.recoveryService.recoverWorkItem();
+    if (!recoverItem) return;
+
+    const { issueId, startTime, lastTime } = recoverItem;
+    const { time, minutes, isValid } = workItemTime(startTime, lastTime);
+
+    if (isValid) {
+      console.log(`Recovered ${minutes} m (${time} ms) in issue ${issueId}`);
+
+      this.workItemService.commitWorkItem({
+        issueId, date: lastTime.getTime(), minutes
+      });
+    } else {
+      console.log(`Recovered work item is too short (${time} ms) in issue ${issueId}`);
+    }
+  }
+
   start(issue) {
     if (this._current) this.stop();
+
+    const startTime = new Date();
 
     this._current = {
       issue,
       isActive: true,
-      startTime: new Date(),
+      startTime,
       endTime: null
     };
+
+    this.recoveryService.start(issue.id, startTime);
 
     console.log(`Start tracking issue ${issue.idReadable} (${issue.id})`);
 
@@ -32,16 +62,18 @@ class TrackingService extends EventEmitter {
       return;
     }
 
+    this.recoveryService.stop();
+
     const { issue, startTime } = this._current;
     const endTime = new Date();
-    const time = endTime.getTime() - startTime.getTime();
-    const minutes = Math.ceil(time / 1000 / 60);
+    const { time, minutes, isValid } = workItemTime(startTime, endTime);
 
     this._current.endTime = endTime;
     this._current.isActive = false;
 
-    if (time > 30000) {
-      console.log(`Tracked ${time} ms (${minutes} m) in issue ${issue.idReadable} (${issue.id})`);
+    if (isValid) {
+      console.log(`Tracked ${minutes} m (${time} ms) in issue ${issue.idReadable} (${issue.id})`);
+      
       this.workItemService.commitWorkItem({
         issueId: issue.id, date: endTime.getTime(), minutes
       });
@@ -66,5 +98,15 @@ class TrackingService extends EventEmitter {
     this._current.issue = issue;
   }
 }
+
+const workItemTime = (startTime, endTime) => {
+  const time = endTime.getTime() - startTime.getTime();
+  const minutes = Math.ceil(time / 1000 / 60);
+
+  return {
+    time, minutes,
+    isValid: time > MIN_DURATION
+  }
+};
 
 export default TrackingService;
