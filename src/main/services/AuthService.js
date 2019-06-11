@@ -2,13 +2,7 @@ import { EventEmitter } from 'events';
 import fetch from 'node-fetch';
 import keytar from 'keytar';
 import urls from './urls';
-
-
-// base64(service_id:service_secret)
-const SERVICE_AUTHORIZATION = 'NDZiN2Q5OGItODk0Ni00OGI1LWI0NjYtYjdhYjM4ZjRkYWM4OnkxUTR6RGRoY0s=';
-
-// id of YouTrack Service
-const YOUTRACK_SCOPE = '03499c9a-a075-4deb-9f01-8cc69fe5c959';
+import { YOUTRACK_SERVICE_ID, APP_SERVICE_AUTHORIZATION } from './config';
 
 // Secure storage service name
 const STORAGE_SERVICE = 'youtracker';
@@ -78,11 +72,11 @@ class AuthService extends EventEmitter {
   async logIn(login, password) {
     console.log('Logging in...');
     
-    const body = `grant_type=password&username=${login}&password=${password}&scope=${YOUTRACK_SCOPE}&access_type=offline`;
+    const body = `grant_type=password&username=${login}&password=${password}&scope=${YOUTRACK_SERVICE_ID}&access_type=offline`;
     
     const response = await fetch(urls.oauth, {
       headers: {
-        'Authorization': `Basic ${SERVICE_AUTHORIZATION}`,
+        'Authorization': `Basic ${APP_SERVICE_AUTHORIZATION}`,
         'Content-Type': 'application/x-www-form-urlencoded'
       },
       method: 'POST',
@@ -122,11 +116,11 @@ class AuthService extends EventEmitter {
     
     console.log('Refreshing token...');
     
-    const body = `grant_type=refresh_token&refresh_token=${refreshToken}&scope=${YOUTRACK_SCOPE}`;
+    const body = `grant_type=refresh_token&refresh_token=${refreshToken}&scope=${YOUTRACK_SERVICE_ID}`;
     
     const response = await fetch(urls.oauth, {
       headers: {
-        'Authorization': `Basic ${SERVICE_AUTHORIZATION}`,
+        'Authorization': `Basic ${APP_SERVICE_AUTHORIZATION}`,
         'Content-Type': 'application/x-www-form-urlencoded'
       },
       method: 'POST',
