@@ -14,13 +14,14 @@ class ApiService {
     return response.ok ? await response.json() : [];
   }
 
-  async postWorkItem({ issueId, date, minutes }) {
+  async postWorkItem({ issueId, date, minutes, startTime, endTime }) {
     const response = await this.authService.authorizedFetch(urls.postWorkItems(issueId), {
       headers,
       method: 'POST',
       body: JSON.stringify({
         date,
         duration: { minutes },
+        text: workItemText(startTime, endTime)
       })
     });
 
@@ -33,6 +34,17 @@ class ApiService {
 const headers = {
   'Accept': 'application/json',
   'Content-Type': 'application/json'
+};
+
+const formatTime = (time) => {
+  return time.toLocaleTimeString('ru-RU', { timeZone: 'Europe/Moscow' });
+};
+
+const workItemText = (startTime, endTime) => {
+  if (startTime && endTime) {
+    return `[${formatTime(startTime)}–${formatTime(endTime)}] YouTracker`;
+  }
+  return null;
 };
 
 export default ApiService;
