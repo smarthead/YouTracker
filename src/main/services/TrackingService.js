@@ -31,7 +31,11 @@ class TrackingService extends EventEmitter {
       console.log(`Recovered ${minutes} m (${time} ms) in issue ${issueId}`);
 
       this.workItemService.commitWorkItem({
-        issueId, date: lastTime.getTime(), minutes
+        issueId,
+        date: lastTime.getTime(),
+        minutes,
+        startTime,
+        endTime: lastTime
       });
     } else {
       console.log(`Recovered work item is too short (${time} ms) in issue ${issueId}`);
@@ -79,7 +83,11 @@ class TrackingService extends EventEmitter {
       console.log(`Tracked ${minutes} m (${time} ms) in issue ${issue.idReadable} (${issue.id})`);
       
       this.workItemService.commitWorkItem({
-        issueId: issue.id, date: endTime.getTime(), minutes
+        issueId: issue.id,
+        date: endTime.getTime(),
+        minutes,
+        startTime,
+        endTime
       });
     } else {
       console.log(`Work item is too short (${time} ms) in issue ${issue.idReadable} (${issue.id})`);
@@ -91,7 +99,9 @@ class TrackingService extends EventEmitter {
   add({ issueId, minutes }) {
     const today = new Date();
     this.workItemService.commitWorkItem({
-      issueId, date: today.getTime(), minutes
+      issueId,
+      date: today.getTime(),
+      minutes
     });
   }
 
