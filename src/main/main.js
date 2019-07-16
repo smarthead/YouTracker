@@ -1,5 +1,6 @@
 import { app, BrowserWindow, ipcMain, shell, Menu } from 'electron';
 import isDev from './utils/isDev';
+import isMac from './utils/isMac';
 import urls from './services/urls';
 import MainService from './services/MainService';
 
@@ -37,8 +38,7 @@ app.on('ready', () => {
 });
 
 app.on('window-all-closed', () => {
-  // macOS
-  if (process.platform !== 'darwin') {
+  if (!isMac) {
     app.quit();
   }
 });
@@ -83,31 +83,55 @@ mainService.on('changed', () => {
 
 // TODO:
 // - Вынести в отдельный файл
-// - Для разных ОС — разное меню. Например, appMenu — только на macOS
 // - Локализовать — написать по-русски, сделать чтобы системные меню были на русском
 const updateMenu = (appState) => {
-  Menu.setApplicationMenu(Menu.buildFromTemplate([
-    { role: 'appMenu' },
-    { role: 'editMenu' },
-    {
-      label: 'Account',
-      submenu: [
-        {
-          label: 'Log out',
-          enabled: appState.isAuthorized,
-          click: () => mainService.logOut()
-        }
-      ],
-    },
-    {
-      label: 'Issues',
-      submenu: [
-        {
-          label: 'Reload',
-          enabled: appState.isAuthorized,
-          click: () => mainService.reloadIssues()
-        }
-      ],
-    }
-  ]));
+  Menu.setApplicationMenu(Menu.buildFromTemplate(
+    isMac ? [
+      {
+        label: app.getName(),
+        submenu: [
+          { role: 'about' },
+          { type: 'separator' },
+          {
+            label: 'Reload issues',
+            enabled: appState.isAuthorized,
+            click: () => mainService.reloadIssues()
+          },
+          { type: 'separator' },
+          {
+            label: 'Log out',
+            enabled: appState.isAuthorized,
+            click: () => mainService.logOut()
+          },
+          { type: 'separator' },
+          { role: 'hide' },
+          { role: 'hideothers' },
+          { role: 'unhide' },
+          { type: 'separator' },
+          { role: 'quit' }
+        ]
+      },
+      { role: 'editMenu' }
+    ] : [
+      {
+        label: 'File',
+        submenu: [
+          {
+            label: 'Reload issues',
+            enabled: appState.isAuthorized,
+            click: () => mainService.reloadIssues()
+          },
+          { type: 'separator' },
+          {
+            label: 'Log out',
+            enabled: appState.isAuthorized,
+            click: () => mainService.logOut()
+          },
+          { type: 'separator' },
+          { role: 'quit' }
+        ]
+      },
+      { role: 'editMenu' }
+    ]
+  ));
 };
