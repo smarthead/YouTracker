@@ -72,15 +72,20 @@ class AuthService extends EventEmitter {
   async logIn(login, password) {
     console.log('Logging in...');
     
-    const body = `grant_type=password&username=${login}&password=${password}&scope=${YOUTRACK_SERVICE_ID}&access_type=offline`;
-    
+    const params = new URLSearchParams();
+    params.append('grant_type', 'password');
+    params.append('username', login);
+    params.append('password', password);
+    params.append('scope', YOUTRACK_SERVICE_ID);
+    params.append('access_type', 'offline');
+
     const response = await fetch(urls.oauth, {
       headers: {
         'Authorization': `Basic ${APP_SERVICE_AUTHORIZATION}`,
         'Content-Type': 'application/x-www-form-urlencoded'
       },
       method: 'POST',
-      body
+      body: params
     });
     
     if (!response.ok) {
@@ -116,15 +121,18 @@ class AuthService extends EventEmitter {
     
     console.log('Refreshing token...');
     
-    const body = `grant_type=refresh_token&refresh_token=${refreshToken}&scope=${YOUTRACK_SERVICE_ID}`;
-    
+    const params = new URLSearchParams();
+    params.append('grant_type', 'refresh_token');
+    params.append('refresh_token', refreshToken);
+    params.append('scope', YOUTRACK_SERVICE_ID);
+
     const response = await fetch(urls.oauth, {
       headers: {
         'Authorization': `Basic ${APP_SERVICE_AUTHORIZATION}`,
         'Content-Type': 'application/x-www-form-urlencoded'
       },
       method: 'POST',
-      body
+      body: params
     });
     
     if (!response.ok) {
