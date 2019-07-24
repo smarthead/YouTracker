@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ipc from '../ipc';
+import { makeIssueContextMenu } from '../menu/issueContextMenu';
 
 const TIMER_UPDATE_INTERVAL = 5 * 1000; // 5 sec
 
@@ -34,8 +35,15 @@ const Toolbar = ({ current }) => {
     }
   }, [isActive, startTime]);
 
+  const onContextMenu = (event) => {
+    if (disabled) return;
+    event.preventDefault();
+    const menu = makeIssueContextMenu(id, idReadable, summary);
+    menu.popup();
+  };
+
   return (
-    <div className="toolbar">
+    <div className="toolbar" onContextMenu={onContextMenu}>
       <div className="toolbar__left">
         <button
           className="toolbar__start-stop-button"
