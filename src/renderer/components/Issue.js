@@ -1,8 +1,6 @@
 import React from 'react';
-import { remote, clipboard } from 'electron';
 import ipc from '../ipc';
-
-const { Menu } = remote;
+import { makeIssueContextMenu } from '../menu/issueContextMenu';
 
 const Issue = (props) => {
   const {
@@ -12,7 +10,7 @@ const Issue = (props) => {
   
   const onContextMenu = (event) => {
     event.preventDefault();
-    const menu = makeContextMenu(id, idReadable, summary);
+    const menu = makeIssueContextMenu(id, idReadable, summary);
     menu.popup();
   };
 
@@ -38,33 +36,6 @@ const Issue = (props) => {
       </div>
     </div>
   );
-};
-
-const makeContextMenu = (id, idReadable, summary) => {
-  const add = (minutes) => ipc.addWorkItem(id, minutes);
-
-  return Menu.buildFromTemplate([
-    {
-      label: 'Копировать ID и название',
-      click: () => clipboard.writeText(`${idReadable} ${summary}`)
-    },
-    {
-      label: 'Открыть',
-      click: ipc.openLink(idReadable)
-    },
-    { type: 'separator' },
-    {
-      label: 'Добавить время',
-      submenu: [
-        { label: '5m', click: add(5) },
-        { label: '10m', click: add(10) },
-        { label: '15m', click: add(15) },
-        { label: '30m', click: add(30) },
-        { label: '1h', click: add(60) },
-        { label: '2h', click: add(120) }
-      ]
-    }
-  ]);
 };
 
 export default Issue;
