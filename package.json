@@ -1,5 +1,5 @@
 {
-  "name": "you-tracker",
+  "name": "youtracker",
   "productName": "YouTracker",
   "version": "1.0.0",
   "description": "",
@@ -30,7 +30,7 @@
     "react-dom": "^16.8.6"
   },
   "build": {
-    "appId": "ru.smarthead.you-tracker",
+    "appId": "ru.smarthead.YouTracker",
     "files": [
       "build/**/*",
       "node_modules/**/*"
