@@ -9,6 +9,7 @@ cache:
 before_script:
   - npm -v
   - npm install
+  - npm run rebuild-native
 
 package:
   stage: pack
