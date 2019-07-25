@@ -6,12 +6,12 @@ import App from './components/App';
 let appState = { issues: [], activeIssueId: null };
 
 const render = () => {
-  ReactDOM.render(<App appState={appState} />, document.getElementById('root'));
+    ReactDOM.render(<App appState={appState} />, document.getElementById('root'));
 }
 
 ipcRenderer.on('app-state-updated', (event, arg) => {
-  appState = arg;
-  render();
+    appState = arg;
+    render();
 });
 
 render();
