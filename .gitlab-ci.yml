@@ -1,4 +1,5 @@
 stages:
+  - build
   - pack
 
 cache:
@@ -11,13 +12,18 @@ before_script:
   - npm install
   - npm run rebuild-native
 
-package:
+building:
+  stage: build
+  script:
+    - npm run build
+
+packaging:
   stage: pack
   script:
     - npm run pack
+  when: manual
   artifacts:
     paths:
       - dist/YouTracker-1.0.0.dmg
-  when: manual
-  # only:
-  #   - master
+      - dist/YouTracker\ Setup\ 1.0.0.exe
+      - dist/YouTracker\ 1.0.0.AppImage
