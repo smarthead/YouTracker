@@ -1,5 +1,4 @@
 stages:
-  - build
   - pack
 
 cache:
@@ -11,11 +10,6 @@ before_script:
   - npm -v
   - npm install
   - npm run rebuild-native
-
-building:
-  stage: build
-  script:
-    - npm run build
 
 packaging:
   stage: pack
