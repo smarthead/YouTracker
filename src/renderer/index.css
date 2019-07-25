@@ -1,18 +1,17 @@
 body {
-  background-color: #282c34;
-  color: white;
-  margin: 0;
-  font-size: 13px;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    background-color: #282c34;
+    color: white;
+    margin: 0;
+    font-size: 13px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+        "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+        sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+    font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
 :not(input):not(textarea),
@@ -22,177 +21,177 @@ code {
 }
 
 input, button, textarea, :focus {
-  outline: none;
+    outline: none;
 }
 
 a {
-  color: #61dafb;
+    color: #61dafb;
 }
 
 button {
-  font-size: 1em;
-  color: #61dafb;
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  white-space: nowrap;
+    font-size: 1em;
+    color: #61dafb;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    white-space: nowrap;
 }
 
 button:disabled {
-  color: #61dafb99;
-  cursor: default;
+    color: #61dafb99;
+    cursor: default;
 }
 
 .toolbar {
-  background-color: #282c34;
-  border-bottom: 1px solid #ffffff11;
-  position: fixed;
-  padding: 10px 16px 8px 10px;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 32px;
-  z-index: 1000;
+    background-color: #282c34;
+    border-bottom: 1px solid #ffffff11;
+    position: fixed;
+    padding: 10px 16px 8px 10px;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 32px;
+    z-index: 1000;
 }
 
 .toolbar__left {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  height: 32px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    height: 32px;
 }
 
 .toolbar__right {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  position: absolute;
-  right: 16px;
-  top: 10px;
-  height: 32px;
-  padding-left: 10px;
-  background: linear-gradient(to right, #282c3400 0%, #282c34ff 10px, #282c34ff 100%);
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    position: absolute;
+    right: 16px;
+    top: 10px;
+    height: 32px;
+    padding-left: 10px;
+    background: linear-gradient(to right, #282c3400 0%, #282c34ff 10px, #282c34ff 100%);
 }
 
 .toolbar__summary {
-  overflow: hidden;
-  white-space: nowrap;
-  cursor: default;
+    overflow: hidden;
+    white-space: nowrap;
+    cursor: default;
 }
 
 .toolbar__empty-summary {
-  overflow: hidden;
-  white-space: nowrap;
-  cursor: default;
-  color: #999999;
-  padding-left: 8px;
+    overflow: hidden;
+    white-space: nowrap;
+    cursor: default;
+    color: #999999;
+    padding-left: 8px;
 }
 
 .toolbar__start-stop-button {
-  font-size: 1.5em;
+    font-size: 1.5em;
 }
 
 .toolbar__timer {
-  font-size: 1.7em;
-  margin-left: 8px;
-  margin-right: 8px;
+    font-size: 1.7em;
+    margin-left: 8px;
+    margin-right: 8px;
 }
 
 .spent-time {
-  color: #666666;
-  font-size: 12px;
-  padding: 3px;
-  cursor: default;
+    color: #666666;
+    font-size: 12px;
+    padding: 3px;
+    cursor: default;
 }
 
 .issueList {
-  padding-top: 58px;
-  padding-bottom: 8px;
+    padding-top: 58px;
+    padding-bottom: 8px;
 }
 
 .issue {
-  position: relative;
-  padding: 0 16px 0 8px;
-  height: 32px;
+    position: relative;
+    padding: 0 16px 0 8px;
+    height: 32px;
 }
 
 .issue__left {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  height: 32px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    height: 32px;
 }
 
 .issue__right {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  position: absolute;
-  right: 16px;
-  top: 0;
-  bottom: 0;
-  height: 32px;
-  padding-left: 10px;
-  background: linear-gradient(to right, #282c3400 0%, #282c34ff 10px, #282c34ff 100%);
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    position: absolute;
+    right: 16px;
+    top: 0;
+    bottom: 0;
+    height: 32px;
+    padding-left: 10px;
+    background: linear-gradient(to right, #282c3400 0%, #282c34ff 10px, #282c34ff 100%);
 }
 
 .issue__summary {
-  overflow: hidden;
-  white-space: nowrap;
-  cursor: default;
+    overflow: hidden;
+    white-space: nowrap;
+    cursor: default;
 }
 
 .issue__start-button {
-  visibility: hidden;
-  padding: 3px 4px;
+    visibility: hidden;
+    padding: 3px 4px;
 }
 
 .issue:hover .issue__start-button {
-  visibility: visible;
+    visibility: visible;
 }
 
 .issue__stop-button {
-  padding: 3px 4px;
+    padding: 3px 4px;
 }
 
 .login {
-  text-align: center;
-  padding-top: 80px;
+    text-align: center;
+    padding-top: 80px;
 }
 
 .login__field {
-  border: none;
-  border-bottom: 1px solid #ffffff66;
-  background-color: #282c34;
-  color: white;
-  font-size: 1em;
-  width: 160px;
-  margin: 8px;
-  padding-bottom: 4px;
+    border: none;
+    border-bottom: 1px solid #ffffff66;
+    background-color: #282c34;
+    color: white;
+    font-size: 1em;
+    width: 160px;
+    margin: 8px;
+    padding-bottom: 4px;
 }
 
 .login__field:focus {
-  border-bottom: 1px solid #61dafb;
+    border-bottom: 1px solid #61dafb;
 }
 
 .login__field::placeholder {
-  color: #ffffff66;
+    color: #ffffff66;
 }
 
 .login__button {
-  margin-top: 14px;
+    margin-top: 14px;
 }
 
 .colon {
-  opacity: 1;
+    opacity: 1;
 }
 
 .colon--active {
-  animation: blink 1s step-start 0s infinite;
+    animation: blink 1s step-start 0s infinite;
 }
 
 @keyframes blink {
-  50% {
-    opacity: 0;
-  }
+    50% {
+        opacity: 0;
+    }
 }
