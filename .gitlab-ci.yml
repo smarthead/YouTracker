@@ -19,5 +19,5 @@ packaging:
   artifacts:
     paths:
       - dist/YouTracker-1.0.0.dmg
-      - dist/YouTracker\ Setup\ 1.0.0.exe
-      - dist/YouTracker\ 1.0.0.AppImage
+      - dist/YouTracker Setup 1.0.0.exe
+      - dist/YouTracker 1.0.0.AppImage
