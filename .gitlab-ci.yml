@@ -1,0 +1,22 @@
+stages:
+  - pack
+
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - node_modules/
+
+before_script:
+  - npm -v
+  - npm install
+
+package:
+  stage: pack
+  script:
+    - npm run pack
+  artifacts:
+    paths:
+      - dist/
+  when: manual
+  # only:
+  #   - master
