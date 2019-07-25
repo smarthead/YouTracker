@@ -17,7 +17,7 @@ package:
     - npm run pack
   artifacts:
     paths:
-      - dist/
+      - dist/YouTracker-1.0.0.dmg
   when: manual
   # only:
   #   - master
