@@ -1,0 +1,23 @@
+stages:
+  - pack
+
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - node_modules/
+
+before_script:
+  - npm -v
+  - npm install
+  - npm run rebuild-native
+
+packaging:
+  stage: pack
+  script:
+    - npm run pack
+  when: manual
+  artifacts:
+    paths:
+      - dist/YouTracker-1.0.0.dmg
+      - dist/YouTracker Setup 1.0.0.exe
+      - dist/YouTracker 1.0.0.AppImage

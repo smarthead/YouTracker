@@ -8,7 +8,7 @@
     "build": "babel src --out-dir build --copy-files",
     "rebuild-native": "./node_modules/.bin/electron-rebuild",
     "start": "npm run build && electron .",
-    "pack": "npm run build && build -c.extraMetadata.main=build/main/main.js"
+    "pack": "npm run build && build --mac --win --linux -c.extraMetadata.main=build/main/main.js"
   },
   "keywords": [],
   "author": "",
