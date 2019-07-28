@@ -44,7 +44,7 @@ button:disabled {
 
 .toolbar {
     background-color: #282c34;
-    border-bottom: 1px solid #ffffff11;
+    border-bottom: 1px solid #ffffff33;
     position: fixed;
     padding: 10px 16px 8px 10px;
     top: 0;
@@ -152,6 +152,44 @@ button:disabled {
 
 .issue__stop-button {
     padding: 3px 4px;
+}
+
+.searchBar {
+    background-color: #282c34;
+    border-top: 1px solid #ffffff33;
+    position: fixed;
+    padding: 8px 16px 8px 34px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 24px;
+    z-index: 900;
+}
+
+.searchBar__field {
+    box-sizing: border-box;
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid #ffffff33;
+    background-color: #282c34;
+    color: white;
+    font-size: 1em;
+    padding-bottom: 4px;
+}
+
+.searchBar__field:focus {
+    border-bottom: 1px solid #ffffff;
+}
+
+.searchBar__clear-button {
+    color: #ffffff66;
+    position: absolute;
+    top: 8px;
+    right: 12px;
+}
+
+.searchBar__clear-button:hover {
+    color: #ffffff;
 }
 
 .login {

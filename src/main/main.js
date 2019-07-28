@@ -1,6 +1,6 @@
 import { app, BrowserWindow, ipcMain, shell, Menu } from 'electron';
 import isDev from './utils/isDev';
-import isMac from './utils/isMac';
+import isMac from '../common/isMac';
 import urls from './services/urls';
 import MainService from './services/MainService';
 
