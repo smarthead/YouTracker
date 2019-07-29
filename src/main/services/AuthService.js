@@ -1,7 +1,7 @@
 import { EventEmitter } from 'events';
 import fetch from 'node-fetch';
 import keytar from 'keytar';
-import urls from './urls';
+import urls from '../../common/urls';
 import { YOUTRACK_SERVICE_ID, APP_SERVICE_AUTHORIZATION } from './config';
 
 // Secure storage service name

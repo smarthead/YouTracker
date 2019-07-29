@@ -1,4 +1,5 @@
-import { YOUTRACK_URL } from './config';
+// Base YouTrack URL
+const YOUTRACK_URL = 'https://youtrack.smarthead.ru';
 
 // API
 
@@ -10,8 +11,9 @@ const getIssues = `${YOUTRACK_URL}/api/issues?fields=id,idReadable,summary,custo
 
 const postWorkItems = (issueId) => `${YOUTRACK_URL}/api/issues/${issueId}/timeTracking/workItems`;
 
-// Web
+// Links
 
 const viewIssue = (idReadable) => `${YOUTRACK_URL}/issue/${idReadable}`;
+const editIssue = (idReadable) => `${YOUTRACK_URL}/issue/${idReadable}?edit`;
 
-export default { oauth, getMe, getIssues, postWorkItems, viewIssue };
+export default { oauth, getMe, getIssues, postWorkItems, viewIssue, editIssue };
