@@ -16,9 +16,3 @@ publishing:
   script:
     - npm run publish
   when: manual
-  artifacts:
-    expire_in: 1 day
-    paths:
-      - dist/YouTracker-1.0.0.dmg
-      - dist/YouTracker Setup 1.0.0.exe
-      - dist/YouTracker 1.0.0.AppImage
