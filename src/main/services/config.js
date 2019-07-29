@@ -1,6 +1,3 @@
-// Base YouTrack URL
-export const YOUTRACK_URL = 'https://youtrack.smarthead.ru';
-
 // YouTrack Service id
 // https://youtrack.smarthead.ru/hub/services
 export const YOUTRACK_SERVICE_ID = 'd438255c-071c-4987-b084-fe9d45cd1242';

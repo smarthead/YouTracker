@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { shell } from 'electron';
+import urls from '../../common/urls';
 import ipc from '../ipc';
 import { makeIssueContextMenu } from '../menu/issueContextMenu';
 
@@ -35,15 +37,19 @@ const Toolbar = ({ current }) => {
         }
     }, [isActive, startTime]);
     
-    const onContextMenu = (event) => {
+    const handleContextMenu = (event) => {
         if (disabled) return;
         event.preventDefault();
         const menu = makeIssueContextMenu(id, idReadable, summary);
         menu.popup();
     };
+
+    const handleLinkClick = () => {
+        shell.openExternal(urls.viewIssue(idReadable))
+    };
     
     return (
-        <div className="toolbar" onContextMenu={onContextMenu}>
+        <div className="toolbar" onContextMenu={handleContextMenu}>
             <div className="toolbar__left">
                 <button
                     className="toolbar__start-stop-button"
@@ -61,7 +67,7 @@ const Toolbar = ({ current }) => {
                     : ''
                 }
                 
-                {idReadable ? <button onClick={ipc.openLink(idReadable)}>{idReadable}</button> : ''}
+                {idReadable ? <button onClick={handleLinkClick}>{idReadable}</button> : ''}
                 
                 {
                     disabled

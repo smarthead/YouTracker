@@ -1,4 +1,5 @@
-import { remote, clipboard } from 'electron';
+import { remote, clipboard, shell } from 'electron';
+import urls from '../../common/urls';
 import ipc from '../ipc';
 
 const { Menu } = remote;
@@ -8,13 +9,26 @@ export const makeIssueContextMenu = (id, idReadable, summary) => {
     
     return Menu.buildFromTemplate([
         {
-            label: `Открыть ${idReadable}...`,
-            click: ipc.openLink(idReadable)
+            label: idReadable,
+            enabled: false,
+        },
+        { type: 'separator' },
+        {
+            label: 'Открыть...',
+            click: () => shell.openExternal(urls.viewIssue(idReadable))
+        },
+        {
+            label: 'Изменить...',
+            click: () => shell.openExternal(urls.editIssue(idReadable))
         },
         { type: 'separator' },
         {
             label: 'Копировать ID и название',
             click: () => clipboard.writeText(`${idReadable} ${summary}`)
+        },
+        {
+            label: 'Копировать ссылку',
+            click: () => clipboard.writeText(urls.viewIssue(idReadable))
         },
         { type: 'separator' },
         {

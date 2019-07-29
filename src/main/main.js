@@ -1,8 +1,8 @@
-import { app, BrowserWindow, ipcMain, shell, Menu } from 'electron';
+import { app, BrowserWindow, ipcMain, Menu } from 'electron';
 import isDev from './utils/isDev';
 import isMac from '../common/isMac';
-import urls from './services/urls';
 import MainService from './services/MainService';
+import { makeMainMenu } from './menu/mainMenu';
 
 let mainWindow = null;
 const mainService = new MainService();
@@ -63,10 +63,6 @@ ipcMain.on('stop-tracking', (event, arg) => {
     mainService.stopTracking();
 });
 
-ipcMain.on('view-issue', (event, idReadable) => {
-    shell.openExternal(urls.viewIssue(idReadable));
-});
-
 ipcMain.on('add-work-item', (event, item) => {
     mainService.addWorkItem(item);
 });
@@ -81,58 +77,11 @@ mainService.on('changed', () => {
     updateMenu(state);
 });
 
-// TODO:
-// - Вынести в отдельный файл
-// - Локализовать — написать по-русски, сделать чтобы системные меню были на русском
 const updateMenu = (appState) => {
-    Menu.setApplicationMenu(Menu.buildFromTemplate(
-        isMac ? [
-            {
-                label: app.getName(),
-                submenu: [
-                    { role: 'about' },
-                    { type: 'separator' },
-                    {
-                        label: 'Reload issues',
-                        enabled: appState.isAuthorized,
-                        click: () => mainService.reloadIssues()
-                    },
-                    { type: 'separator' },
-                    {
-                        label: 'Log out',
-                        enabled: appState.isAuthorized,
-                        click: () => mainService.logOut()
-                    },
-                    { type: 'separator' },
-                    { role: 'hide' },
-                    { role: 'hideothers' },
-                    { role: 'unhide' },
-                    { type: 'separator' },
-                    { role: 'quit' }
-                ]
-            },
-            { role: 'editMenu' }
-        ] : [
-            {
-                label: 'File',
-                submenu: [
-                    {
-                        label: 'Reload issues',
-                        enabled: appState.isAuthorized,
-                        click: () => mainService.reloadIssues()
-                    },
-                    { type: 'separator' },
-                    {
-                        label: 'Log out',
-                        enabled: appState.isAuthorized,
-                        click: () => mainService.logOut()
-                    },
-                    { type: 'separator' },
-                    { role: 'quit' }
-                ]
-            },
-            { role: 'editMenu' }
-        ]
+    Menu.setApplicationMenu(makeMainMenu(
+        appState,
+        () => mainService.reloadIssues(),
+        () => mainService.logOut()
     ));
 };
     
