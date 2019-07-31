@@ -48,7 +48,16 @@
     },
     "mac": {
       "darkModeSupport": true,
-      "target": "dmg"
+      "target": "dmg",
+      "artifactName": "${productName}.${ext}"
+    },
+    "win": {
+      "target": "nsis",
+      "artifactName": "${productName}-installer.${ext}"
+    },
+    "linux": {
+      "target": "AppImage",
+      "artifactName": "${productName}.${ext}"
     }
   }
 }
