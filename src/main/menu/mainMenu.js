@@ -3,6 +3,7 @@ import isMac from '../../common/isMac';
 
 export const makeMainMenu = (appState, onReload, onLogOut) => {
     const appName = app.getName();
+    const appVersion = app.getVersion();
 
     const editMenu = [
         {
@@ -85,6 +86,11 @@ export const makeMainMenu = (appState, onReload, onLogOut) => {
             {
                 label: 'Файл',
                 submenu: [
+                    {
+                        label: `Версия ${appVersion}`,
+                        enabled: false
+                    },
+                    { type: 'separator' },
                     {
                         label: 'Обновить список задач',
                         enabled: appState.isAuthorized,

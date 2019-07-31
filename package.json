@@ -8,7 +8,7 @@
     "build": "babel src --out-dir build --copy-files",
     "rebuild-native": "./node_modules/.bin/electron-rebuild",
     "start": "npm run build && electron .",
-    "pack": "npm run build && build --mac --win --linux -c.extraMetadata.main=build/main/main.js"
+    "publish": "npm run build && build --mac --win --linux --publish always"
   },
   "keywords": [],
   "author": "",
@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "electron-store": "^3.2.0",
+    "electron-updater": "^4.1.2",
     "keytar": "^4.9.0",
     "node-fetch": "^2.6.0",
     "react": "^16.8.6",
@@ -31,6 +32,9 @@
   },
   "build": {
     "appId": "ru.smarthead.YouTracker",
+    "extraMetadata": {
+      "main": "build/main/main.js"
+    },
     "files": [
       "build/**/*",
       "node_modules/**/*"
@@ -38,8 +42,22 @@
     "directories": {
       "buildResources": "assets"
     },
+    "publish": {
+      "provider": "s3",
+      "bucket": "youtracker.smarthead.ru"
+    },
     "mac": {
-      "darkModeSupport": true
+      "darkModeSupport": true,
+      "target": "dmg",
+      "artifactName": "${productName}.${ext}"
+    },
+    "win": {
+      "target": "nsis",
+      "artifactName": "${productName}-installer.${ext}"
+    },
+    "linux": {
+      "target": "AppImage",
+      "artifactName": "${productName}.${ext}"
     }
   }
 }

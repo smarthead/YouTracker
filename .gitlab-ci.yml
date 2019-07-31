@@ -1,5 +1,5 @@
 stages:
-  - pack
+  - publish
 
 cache:
   key: ${CI_COMMIT_REF_SLUG}
@@ -11,13 +11,8 @@ before_script:
   - npm install
   - npm run rebuild-native
 
-packaging:
-  stage: pack
+publishing:
+  stage: publish
   script:
-    - npm run pack
+    - npm run publish
   when: manual
-  artifacts:
-    paths:
-      - dist/YouTracker-1.0.0.dmg
-      - dist/YouTracker Setup 1.0.0.exe
-      - dist/YouTracker 1.0.0.AppImage

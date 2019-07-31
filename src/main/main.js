@@ -1,4 +1,5 @@
 import { app, BrowserWindow, ipcMain, Menu } from 'electron';
+import { autoUpdater } from 'electron-updater';
 import isDev from './utils/isDev';
 import isMac from '../common/isMac';
 import MainService from './services/MainService';
@@ -35,6 +36,7 @@ app.on('ready', () => {
     createWindow();
     updateMenu(mainService.state);
     mainService.initialize();
+    autoUpdater.checkForUpdatesAndNotify();
 });
 
 app.on('window-all-closed', () => {
