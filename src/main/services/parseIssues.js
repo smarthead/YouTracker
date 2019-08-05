@@ -14,6 +14,7 @@ const parseIssues = (jsonIssues) => {
             id: issue.id,
             idReadable: issue.idReadable,
             summary: issue.summary,
+            project: { id: issue.project.shortName, name: issue.project.name },
             spentTime
         }
     });

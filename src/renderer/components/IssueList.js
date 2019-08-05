@@ -9,14 +9,17 @@ const IssueList = ({ issues, current }) => {
 
     const queryLowerCased = query.toLowerCase();
     const groups = group(
-        issues.filter(issue => issueFilter(issue, queryLowerCased))
+        issues.filter(issue => issueFilter(issue, queryLowerCased)),
+        issue => ({ ...issue.project })
     );
 
     return (
         <div className="issueList">
-            {groups.map(group => (
-                <IssueGroup key={group.id} group={group} activeIssueId={activeIssueId}/>
-            ))}
+            <div>
+                {groups.map(group => (
+                    <IssueGroup key={group.id} group={group} activeIssueId={activeIssueId}/>
+                ))}
+            </div>
             <SearchBar query={query} onQueryChange={setQuery}/>
         </div>
     );
@@ -27,19 +30,18 @@ const issueFilter = (issue, query) => {
         issue.summary.toLowerCase().includes(query)
 }
 
-const group = (issues) => {
+const group = (issues, grouper) => {
     let groups = new Map();
     for (const issue of issues) {
-        // TODO вынести функцию группировки, разделить на id и name
-        const groupId = issue.idReadable.split('-')[0];
-        let groupIssues = groups.has(groupId) ? groups.get(groupId) : [];
-        groupIssues.push(issue);
-        groups.set(groupId, groupIssues);
+        const { id, name } = grouper(issue);
+        let group = groups.has(id) ? groups.get(id) : { name: name, issues: [] };
+        group.issues.push(issue);
+        groups.set(id, group);
     }
 
     let groupArray = [];
     for (const key of groups.keys()) {
-        groupArray.push({ id: key, title: key, issues: groups.get(key) });
+        groupArray.push({ id: key, ...groups.get(key) });
     }
     return groupArray;
 };

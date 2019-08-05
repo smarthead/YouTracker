@@ -3,14 +3,16 @@ import Issue from './Issue';
 
 const IssueGroup = ({ group, activeIssueId }) => {
     return (
-        <div>
+        <>
             <div className="issueGroup__title">
-                {group.title}
+                {group.name}
             </div>
-            {group.issues.map(issue => (
-                <Issue key={issue.id} isActive={issue.id === activeIssueId} { ...issue } />
-            ))}
-        </div>
+            <div>
+                {group.issues.map(issue => (
+                    <Issue key={issue.id} isActive={issue.id === activeIssueId} { ...issue } />
+                ))}
+            </div>
+        </>
     );
 }
 
