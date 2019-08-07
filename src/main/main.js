@@ -1,7 +1,8 @@
-import { app, BrowserWindow, ipcMain, Menu } from 'electron';
+import { app, BrowserWindow, ipcMain, Menu, shell } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import isDev from './utils/isDev';
 import isMac from '../common/isMac';
+import urls from '../common/urls';
 import MainService from './services/MainService';
 import { makeMainMenu } from './menu/mainMenu';
 
@@ -83,7 +84,8 @@ const updateMenu = (appState) => {
     Menu.setApplicationMenu(makeMainMenu(
         appState,
         () => mainService.reloadIssues(),
-        () => mainService.logOut()
+        () => mainService.logOut(),
+        () => shell.openExternal(urls.viewAllIssues)
     ));
 };
     

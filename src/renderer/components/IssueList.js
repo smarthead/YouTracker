@@ -9,7 +9,7 @@ const IssueList = ({ issues, current }) => {
 
     const queryLowerCased = query.toLowerCase();
     const groups = group(
-        issues.filter(issue => issueFilter(issue, queryLowerCased)),
+        issues.filter(issue => satisfies(issue, queryLowerCased)),
         issue => ({ ...issue.project })
     );
 
@@ -25,13 +25,15 @@ const IssueList = ({ issues, current }) => {
     );
 }
 
-const issueFilter = (issue, query) => {
-    return issue.idReadable.toLowerCase().includes(query) ||
-        issue.summary.toLowerCase().includes(query)
+const satisfies = (issue, query) => {
+    const idReadable = issue.idReadable.toLowerCase();
+    const summary = issue.summary.toLowerCase();
+    return idReadable.includes(query) || summary.includes(query);
 }
 
 const group = (issues, grouper) => {
     let groups = new Map();
+
     for (const issue of issues) {
         const { id, name } = grouper(issue);
         let group = groups.has(id) ? groups.get(id) : { name: name, issues: [] };
@@ -39,11 +41,9 @@ const group = (issues, grouper) => {
         groups.set(id, group);
     }
 
-    let groupArray = [];
-    for (const key of groups.keys()) {
-        groupArray.push({ id: key, ...groups.get(key) });
-    }
-    return groupArray;
+    return [...groups.keys()].map(key => (
+        { id: key, ...groups.get(key) }
+    ));
 };
 
 export default IssueList;

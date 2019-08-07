@@ -105,13 +105,18 @@ button:disabled {
 }
 
 .issueList {
-    padding: 58px 0;
+    padding: 50px 0;
+}
+
+.issueGroup {
+    margin-bottom: 6px;
 }
 
 .issueGroup__title {
-    padding: 8px 16px 4px 11px;
-    font-size: 0.9em;
-    color: #999999;
+    padding: 5px 16px 5px 16px;
+    font-size: 0.85em;
+    color: #bbbbbb;
+    background-color: #323741;
 }
 
 .issue {

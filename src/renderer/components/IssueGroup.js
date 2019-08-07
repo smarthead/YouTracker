@@ -3,7 +3,7 @@ import Issue from './Issue';
 
 const IssueGroup = ({ group, activeIssueId }) => {
     return (
-        <>
+        <div className="issueGroup">
             <div className="issueGroup__title">
                 {group.name}
             </div>
@@ -12,7 +12,7 @@ const IssueGroup = ({ group, activeIssueId }) => {
                     <Issue key={issue.id} isActive={issue.id === activeIssueId} { ...issue } />
                 ))}
             </div>
-        </>
+        </div>
     );
 }
 
