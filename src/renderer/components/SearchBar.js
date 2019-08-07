@@ -18,10 +18,15 @@ const SearchBar = (props) => {
         const handleKeyDown = (event) => {
             // Clear search on Escape
             if (event.key === 'Escape') {
+                inputRef.current.blur();
                 onQueryChange('');
             }
             // Set focus on Cmd/Ctrl+F
             if (event.code === 'KeyF' && (isMac && event.metaKey || !isMac && event.ctrlKey)) {
+                inputRef.current.focus();
+            }
+            // Auto search while typing
+            if (event.key.length === 1 && query === '' && !event.metaKey && !event.ctrlKey) {
                 inputRef.current.focus();
             }
         };
@@ -35,7 +40,7 @@ const SearchBar = (props) => {
             <input
                 type="text"
                 className="searchBar__field"
-                placeholder={`Поиск по ID или названию задачи (${isMac ? '⌘F' : 'Ctrl+F'})`}
+                placeholder={`Начните вводить ID или название задачи (${isMac ? '⌘F' : 'Ctrl+F'})`}
                 value={query}
                 onChange={handleQueryChange}
                 ref={inputRef}
