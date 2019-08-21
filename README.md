@@ -1,26 +1,39 @@
-# Time tracker for YouTrack
+# YouTracker — тайм-трекер для YouTrack
 
-## Available Scripts
+## Установка
 
-In the project directory, you can run:
+- [Скачать для Windows](https://youtracker.smarthead.ru/YouTracker-installer.exe)
+- [Скачать для macOS](https://youtracker.smarthead.ru/YouTracker.dmg)
+- [Скачать для Linux](https://youtracker.smarthead.ru/YouTracker.AppImage)
 
-### `npm start`
+После установки приложение обновляется автоматически.
 
-Runs the app in the development mode.
 
-### `npm run build`
+## Разработка
 
-Builds the app to the `build` folder.
+YouTracker разработан на [Electron](https://electronjs.org) и [React](https://reactjs.org).
 
-### `npm run rebuild-native`
+Дистрибутивы распространяются через Amazon S3.
 
-Rebuilds native modules of the app.
 
-### `npm run pack`
+### Инструкции
 
-Packs the app for distribution to the `dist` folder.
+1. `git clone https://gitlab.smarthead.ru/youtrack/youtracker.git`
+2. `cd youtracker`
+3. `npm install && npm run rebuild-native`
+4. `npm start`
 
-## Notes
+### Доступные скрипты
 
-Every time you run `npm install`, run this to rebuild native modules:
-`npm run rebuild-native`.
+#### `npm start`
+Запускает приложение в режиме разработки.
+
+#### `npm run build`
+Собирает приложение в папку `build`.
+
+#### `npm run rebuild-native`
+Пересобирает нативные модули. Рекомендуется вызывать после `npm install`.
+
+#### `npm run publish`
+Собирает, упаковывает приложение для релиза и отправляет обновленную версию на
+S3.
