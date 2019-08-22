@@ -3,12 +3,11 @@
   "productName": "YouTracker",
   "version": "1.0.1",
   "description": "",
-  "main": "build/main/main.js",
+  "main": "build/main.bundle.js",
   "scripts": {
-    "build": "babel src --out-dir build --copy-files",
     "rebuild-native": "./node_modules/.bin/electron-rebuild",
-    "start": "npm run build && electron .",
-    "publish": "npm run build && build --mac --win --linux --publish always"
+    "start": "webpack && electron .",
+    "publish": "webpack && build --mac --win --linux --publish always"
   },
   "keywords": [],
   "author": "",
@@ -18,9 +17,15 @@
     "@babel/core": "^7.4.4",
     "@babel/preset-env": "^7.4.4",
     "@babel/preset-react": "^7.0.0",
+    "babel-loader": "^8.0.6",
+    "css-loader": "^3.2.0",
     "electron": "^5.0.1",
     "electron-builder": "^20.40.2",
-    "electron-rebuild": "^1.8.5"
+    "electron-rebuild": "^1.8.5",
+    "node-loader": "^0.6.0",
+    "style-loader": "^1.0.0",
+    "webpack": "^4.39.2",
+    "webpack-cli": "^3.3.7"
   },
   "dependencies": {
     "electron-store": "^3.2.0",
@@ -33,7 +38,7 @@
   "build": {
     "appId": "ru.smarthead.YouTracker",
     "extraMetadata": {
-      "main": "build/main/main.js"
+      "main": "build/main.bundle.js"
     },
     "files": [
       "build/**/*",
