@@ -5,15 +5,14 @@
   "description": "",
   "main": "build/main.bundle.js",
   "scripts": {
-    "rebuild-native": "./node_modules/.bin/electron-rebuild",
     "start": "webpack && electron .",
-    "publish": "webpack && build --mac --win --linux --publish always"
+    "publish": "webpack && build --mac --win --linux --publish always",
+    "postinstall": "electron-builder install-app-deps"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@babel/cli": "^7.4.4",
     "@babel/core": "^7.4.4",
     "@babel/preset-env": "^7.4.4",
     "@babel/preset-react": "^7.0.0",
@@ -21,7 +20,6 @@
     "css-loader": "^3.2.0",
     "electron": "^5.0.1",
     "electron-builder": "^20.40.2",
-    "electron-rebuild": "^1.8.5",
     "node-loader": "^0.6.0",
     "style-loader": "^1.0.0",
     "webpack": "^4.39.2",
@@ -42,7 +40,7 @@
     },
     "files": [
       "build/**/*",
-      "node_modules/**/*"
+      "static/**/*"
     ],
     "directories": {
       "buildResources": "assets"

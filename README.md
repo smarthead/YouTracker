@@ -20,7 +20,7 @@ YouTracker разработан на [Electron](https://electronjs.org) и [Reac
 
 1. `git clone https://gitlab.smarthead.ru/youtrack/youtracker.git`
 2. `cd youtracker`
-3. `npm install && npm run rebuild-native`
+3. `npm install`
 4. `npm start`
 
 ### Доступные скрипты
@@ -28,12 +28,6 @@ YouTracker разработан на [Electron](https://electronjs.org) и [Reac
 #### `npm start`
 Запускает приложение в режиме разработки.
 
-#### `npm run build`
-Собирает приложение в папку `build`.
-
-#### `npm run rebuild-native`
-Пересобирает нативные модули. Рекомендуется вызывать после `npm install`.
-
 #### `npm run publish`
 Собирает, упаковывает приложение для релиза и отправляет обновленную версию на
-S3.
+S3. Не рекомендуется запускать локально. Сборка происходит на GitLab CI.

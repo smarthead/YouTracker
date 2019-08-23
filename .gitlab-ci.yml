@@ -7,9 +7,7 @@ cache:
     - node_modules/
 
 before_script:
-  - npm -v
   - npm install
-  - npm run rebuild-native
 
 publishing:
   stage: publish
