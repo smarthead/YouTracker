@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import IssueGroup from './IssueGroup';
-import SearchBar from './SearchBar';
+import SearchBar from '../SearchBar/SearchBar';
+import styles from './IssueList.css';
 
 const IssueList = ({ issues, current }) => {
     const activeIssueId = current && current.isActive ? current.issue.id : null;
@@ -14,7 +15,7 @@ const IssueList = ({ issues, current }) => {
     );
 
     return (
-        <div className="issueList">
+        <div className={styles.issueList}>
             <div>
                 {groups.map(group => (
                     <IssueGroup key={group.id} group={group} activeIssueId={activeIssueId}/>

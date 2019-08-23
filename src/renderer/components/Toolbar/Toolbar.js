@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { shell } from 'electron';
-import urls from '../../common/urls';
-import ipc from '../ipc';
-import { makeIssueContextMenu } from '../menu/issueContextMenu';
+import urls from '../../../common/urls';
+import ipc from '../../ipc';
+import { makeIssueContextMenu } from '../../menu/issueContextMenu';
+import styles from './Toolbar.css';
 
 const TIMER_UPDATE_INTERVAL = 5 * 1000; // 5 sec
 
@@ -49,10 +50,10 @@ const Toolbar = ({ current }) => {
     };
     
     return (
-        <div className="toolbar" onContextMenu={handleContextMenu}>
-            <div className="toolbar__left">
+        <div className={styles.toolbar} onContextMenu={handleContextMenu}>
+            <div className={styles.left}>
                 <button
-                    className="toolbar__start-stop-button"
+                    className={styles.startStopButton}
                     disabled={disabled}
                     onClick={isActive ? ipc.stopTracking : ipc.startTracking(id)}
                 >
@@ -61,8 +62,8 @@ const Toolbar = ({ current }) => {
                 
                 {
                     isActive
-                    ? <div className="toolbar__timer">
-                        {time.hours}<span className="colon--active">:</span>{time.minutes}
+                    ? <div className={styles.timer}>
+                        {time.hours}<span className={styles.colon}>:</span>{time.minutes}
                     </div>
                     : ''
                 }
@@ -71,18 +72,18 @@ const Toolbar = ({ current }) => {
                 
                 {
                     disabled
-                    ? <div className="toolbar__empty-summary">
+                    ? <div className={styles.emptySummary}>
                         Нет активной задачи
                     </div>
-                    : <div className="toolbar__summary" title={summary}>
+                    : <div className={styles.summary} title={summary}>
                         {summary}
                     </div>
                 }
             
             </div>
             
-            <div className="toolbar__right">
-                <div className="spent-time">
+            <div className={styles.right}>
+                <div className={styles.spentTime}>
                     {spentTime ? spentTime.presentation : ''}
                 </div>
             </div>

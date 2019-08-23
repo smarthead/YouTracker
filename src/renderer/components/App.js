@@ -1,22 +1,18 @@
 import React from 'react';
-import IssueList from './IssueList';
-import Login from './Login';
-import Toolbar from './Toolbar';
+import IssueList from './Issues/IssueList';
+import Login from './Login/Login';
+import Toolbar from './Toolbar/Toolbar';
 
 const App = (props) => {
     const { appState } = props;
     
     return (
-        <div>
-            {
-                appState.isAuthorized
-                ? <div>
-                    <Toolbar { ...appState.state }/>
-                    <IssueList { ...appState.state } />
-                </div>
-                : <Login />
-            }
-        </div>
+        appState.isAuthorized
+        ? <>
+            <Toolbar { ...appState.state }/>
+            <IssueList { ...appState.state } />
+        </>
+        : <Login />
     );
 }
 

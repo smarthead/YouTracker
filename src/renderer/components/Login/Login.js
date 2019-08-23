@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ipcRenderer } from 'electron';
+import styles from './Login.css';
 
 const Login = () => {
     const [login, setLogin] = useState('');
@@ -19,11 +20,11 @@ const Login = () => {
     };
     
     return (
-        <div className="login">
+        <div className={styles.login}>
             <form onSubmit={onSubmit}>
                 <input
                     type="text"
-                    className="login__field"
+                    className={styles.field}
                     placeholder="Логин"
                     value={login}
                     onChange={handleLoginChange}
@@ -32,13 +33,13 @@ const Login = () => {
                 <br/>
                 <input
                     type="password"
-                    className="login__field"
+                    className={styles.field}
                     placeholder="Пароль"
                     value={password}
                     onChange={handlePasswordChange}
                 />
                 <br/>
-                <button type="submit" className="login__button">
+                <button type="submit" className={styles.button}>
                     Войти
                 </button>
             </form>
