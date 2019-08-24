@@ -1,7 +1,6 @@
 const path = require('path');
 
 const common = {
-  mode: 'development',
   output: {
     path: path.resolve(__dirname, 'build'),
     filename: '[name].bundle.js'
