@@ -1,8 +1,9 @@
 import React from 'react';
 import { shell } from 'electron';
-import urls from '../../common/urls';
-import ipc from '../ipc';
-import { makeIssueContextMenu } from '../menu/issueContextMenu';
+import urls from '../../../common/urls';
+import ipc from '../../ipc';
+import { makeIssueContextMenu } from '../../menu/issueContextMenu';
+import styles from './Issue.css';
 
 const Issue = (props) => {
     const {
@@ -21,22 +22,22 @@ const Issue = (props) => {
     };
     
     return (
-        <div className="issue" onContextMenu={handleContextMenu}>
-            <div className="issue__left">
+        <div className={styles.issue} onContextMenu={handleContextMenu}>
+            <div className={styles.left}>
                 {
                     isActive
-                    ? <button className="issue__stop-button" onClick={ipc.stopTracking}>
+                    ? <button className={styles.stopButton} onClick={ipc.stopTracking}>
                         <i className="fas fa-pause" />
                     </button>
-                    : <button className="issue__start-button" onClick={ipc.startTracking(id)}>
+                    : <button className={styles.startButton} onClick={ipc.startTracking(id)}>
                         <i className="fas fa-play" />
                     </button>
                 }
                 <button onClick={handleLinkClick}>{idReadable}</button>
-                <div className="issue__summary" title={summary}>{summary}</div>
+                <div className={styles.summary} title={summary}>{summary}</div>
             </div>
-            <div className="issue__right">
-                <div className="spent-time">
+            <div className={styles.right}>
+                <div className={styles.spentTime}>
                     {spentTime ? spentTime.presentation : ''}
                 </div>
             </div>

@@ -1,0 +1,37 @@
+.searchBar {
+    background-color: #282c34;
+    border-top: 1px solid #ffffff33;
+    position: fixed;
+    padding: 8px 16px 8px 34px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 24px;
+    z-index: 900;
+}
+
+.field {
+    box-sizing: border-box;
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid #ffffff33;
+    background-color: #282c34;
+    color: white;
+    font-size: 1em;
+    padding-bottom: 4px;
+}
+
+.field:focus {
+    border-bottom: 1px solid #ffffff;
+}
+
+.clearButton {
+    color: #ffffff66;
+    position: absolute;
+    top: 8px;
+    right: 12px;
+}
+
+.clearButton:hover {
+    color: #ffffff;
+}

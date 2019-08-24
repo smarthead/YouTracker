@@ -1,0 +1,51 @@
+.issue {
+    position: relative;
+    padding: 0 16px 0 8px;
+    height: 32px;
+}
+
+.left {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    height: 32px;
+}
+
+.right {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    position: absolute;
+    right: 16px;
+    top: 0;
+    bottom: 0;
+    height: 32px;
+    padding-left: 10px;
+    background: linear-gradient(to right, #282c3400 0%, #282c34ff 10px, #282c34ff 100%);
+}
+
+.summary {
+    overflow: hidden;
+    white-space: nowrap;
+    cursor: default;
+}
+
+.startButton {
+    visibility: hidden;
+    padding: 3px 4px;
+}
+
+.issue:hover .startButton {
+    visibility: visible;
+}
+
+.stopButton {
+    padding: 3px 4px;
+}
+
+.spentTime {
+    color: #666666;
+    font-size: 12px;
+    padding: 3px;
+    cursor: default;
+}

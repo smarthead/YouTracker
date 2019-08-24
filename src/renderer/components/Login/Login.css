@@ -1,0 +1,27 @@
+.login {
+    text-align: center;
+    padding-top: 80px;
+}
+
+.field {
+    border: none;
+    border-bottom: 1px solid #ffffff66;
+    background-color: #282c34;
+    color: white;
+    font-size: 1em;
+    width: 160px;
+    margin: 8px;
+    padding-bottom: 4px;
+}
+
+.field:focus {
+    border-bottom: 1px solid #61dafb;
+}
+
+.field::placeholder {
+    color: #ffffff66;
+}
+
+.button {
+    margin-top: 14px;
+}

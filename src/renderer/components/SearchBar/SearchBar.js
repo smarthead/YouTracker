@@ -1,5 +1,6 @@
 import React, { useEffect, createRef } from 'react';
-import isMac from '../../common/isMac';
+import isMac from '../../../common/isMac';
+import styles from './SearchBar.css';
 
 const SearchBar = (props) => {
     const { query, onQueryChange } = props;
@@ -36,17 +37,17 @@ const SearchBar = (props) => {
     }, [onQueryChange, inputRef]);
 
     return (
-        <div className="searchBar">
+        <div className={styles.searchBar}>
             <input
                 type="text"
-                className="searchBar__field"
+                className={styles.field}
                 placeholder={`Начните вводить ID или название задачи (${isMac ? '⌘F' : 'Ctrl+F'})`}
                 value={query}
                 onChange={handleQueryChange}
                 ref={inputRef}
             />
             <button
-                className="searchBar__clear-button"
+                className={styles.clearButton}
                 onClick={handleClearClick}
                 hidden={query === ''}
             >

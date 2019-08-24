@@ -1,0 +1,43 @@
+body {
+    background-color: #282c34;
+    color: white;
+    margin: 0;
+    font-size: 13px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+        "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+        sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
+:not(input):not(textarea),
+:not(input):not(textarea)::after,
+:not(input):not(textarea)::before {
+    user-select: none;
+}
+
+input, button, textarea, :focus {
+    outline: none;
+}
+
+a {
+    color: #61dafb;
+}
+
+button {
+    font-size: 1em;
+    color: #61dafb;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+button:disabled {
+    color: #61dafb99;
+    cursor: default;
+}

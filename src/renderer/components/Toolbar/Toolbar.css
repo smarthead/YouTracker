@@ -1,0 +1,71 @@
+.toolbar {
+    background-color: #282c34;
+    border-bottom: 1px solid #ffffff33;
+    position: fixed;
+    padding: 10px 16px 8px 10px;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 32px;
+    z-index: 1000;
+}
+
+.left {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    height: 32px;
+}
+
+.right {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    position: absolute;
+    right: 16px;
+    top: 10px;
+    height: 32px;
+    padding-left: 10px;
+    background: linear-gradient(to right, #282c3400 0%, #282c34ff 10px, #282c34ff 100%);
+}
+
+.summary {
+    overflow: hidden;
+    white-space: nowrap;
+    cursor: default;
+}
+
+.emptySummary {
+    overflow: hidden;
+    white-space: nowrap;
+    cursor: default;
+    color: #999999;
+    padding-left: 8px;
+}
+
+.startStopButton {
+    font-size: 1.5em;
+}
+
+.timer {
+    font-size: 1.7em;
+    margin-left: 8px;
+    margin-right: 8px;
+}
+
+.spentTime {
+    color: #666666;
+    font-size: 12px;
+    padding: 3px;
+    cursor: default;
+}
+
+.colon {
+    animation: blink 1s step-start 0s infinite;
+}
+
+@keyframes blink {
+    50% {
+        opacity: 0;
+    }
+}

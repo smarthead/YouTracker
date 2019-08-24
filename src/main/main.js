@@ -22,7 +22,7 @@ const createWindow = () => {
         }
     });
     
-    mainWindow.loadFile('build/renderer/index.html');
+    mainWindow.loadFile('static/index.html');
     
     mainWindow.on('closed', () => {
         mainWindow = null;
