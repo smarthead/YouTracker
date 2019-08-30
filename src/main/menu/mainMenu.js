@@ -99,6 +99,7 @@ export const makeMainMenu = (appState, onReload, onLogOut, onOpenIssuesInYouTrac
             {
                 label: 'Обновить',
                 enabled: appState.isAuthorized,
+                accelerator: 'CommandOrControl+R',
                 click: onReload
             },
             { type: 'separator' },
