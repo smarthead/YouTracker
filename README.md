@@ -1,5 +1,7 @@
 # YouTracker — тайм-трекер для YouTrack
 
+[Список изменений](CHANGELOG.md)
+
 ## Установка
 
 - [Скачать для Windows](https://youtracker.smarthead.ru/YouTracker-installer.exe)
