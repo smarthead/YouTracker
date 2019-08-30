@@ -45,6 +45,14 @@ const Toolbar = ({ current }) => {
         menu.popup();
     };
 
+    const handleDoubleClick = () => {
+        if (isActive) {
+            ipc.stopTracking();
+        } else {
+            ipc.startTracking(id)();
+        }
+    };
+
     const handleLinkClick = () => {
         shell.openExternal(urls.viewIssue(idReadable))
     };
@@ -75,7 +83,7 @@ const Toolbar = ({ current }) => {
                     ? <div className={styles.emptySummary}>
                         Нет активной задачи
                     </div>
-                    : <div className={styles.summary} title={summary}>
+                    : <div className={styles.summary} title={summary} onDoubleClick={handleDoubleClick}>
                         {summary}
                     </div>
                 }
