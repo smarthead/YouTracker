@@ -17,6 +17,14 @@ const Issue = (props) => {
         menu.popup();
     };
 
+    const handleDoubleClick = (event) => {
+        if (isActive) {
+            ipc.stopTracking();
+        } else {
+            ipc.startTracking(id)();
+        }
+    };
+
     const handleLinkClick = () => {
         shell.openExternal(urls.viewIssue(idReadable))
     };
@@ -34,7 +42,9 @@ const Issue = (props) => {
                     </button>
                 }
                 <button onClick={handleLinkClick}>{idReadable}</button>
-                <div className={styles.summary} title={summary}>{summary}</div>
+                <div className={styles.summary} title={summary} onDoubleClick={handleDoubleClick}>
+                    {summary}
+                </div>
             </div>
             <div className={styles.right}>
                 <div className={styles.spentTime}>
