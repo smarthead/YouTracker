@@ -1,5 +1,6 @@
 import { EventEmitter } from 'events';
 import TrackingRecoveryService from './TrackingRecoveryService';
+import IdleMonitor from './IdleMonitor';
 
 
 const MIN_DURATION = 30 * 1000; // 30 s
@@ -12,7 +13,8 @@ class TrackingService extends EventEmitter {
         
         this.workItemService = workItemService;
         this.recoveryService = new TrackingRecoveryService();
-        
+        this.idleMonitor = new IdleMonitor();
+
         this._current = null;
     }
     
@@ -59,6 +61,7 @@ class TrackingService extends EventEmitter {
         };
         
         this.recoveryService.start(issue.id, startTime);
+        this.idleMonitor.start();
         
         console.log(`Start tracking issue ${issue.idReadable} (${issue.id})`);
         
@@ -70,6 +73,7 @@ class TrackingService extends EventEmitter {
             return;
         }
         
+        this.idleMonitor.stop();
         this.recoveryService.stop();
         
         const { issue, startTime } = this._current;
