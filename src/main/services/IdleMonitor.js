@@ -6,17 +6,21 @@ const UPDATE_INTERVAL = 1000; // 1 s
 
 // Минимальная продолжительность сессии неактивности
 // TODO 60 seconds
-const SESSION_MIN_DURATION = 5;
+const IDLE_SESSION_MIN_DURATION = 5;
 
 class IdleMonitor extends EventEmitter {
     constructor() {
         super();
         this.savedIdleTime = 0;
-        this.sessionIdleTime = 0;
+        this.idleSessionTime = 0;
     }
 
     get idleTime() {
-        return this.savedIdleTime + this.sessionIdleTime;
+        let idleTime = this.savedIdleTime;
+        if (this.idleSessionTime >= IDLE_SESSION_MIN_DURATION) {
+            idleTime += this.idleSessionTime;
+        }
+        return idleTime;
     }
 
     start() {
@@ -24,14 +28,14 @@ class IdleMonitor extends EventEmitter {
 
         this.updateInterval = setInterval(() => {
             // TODO Заменить на powerMonitor.getSystemIdleTime() после обновления до Electron 6
-            powerMonitor.querySystemIdleTime((sessionIdleTime) => {
+            powerMonitor.querySystemIdleTime((systemIdleTime) => {
                 const oldIdleTime = this.idleTime;
 
                 // New idle session
-                if (sessionIdleTime === 0 && this.sessionIdleTime >= SESSION_MIN_DURATION) {
-                    this.savedIdleTime += this.sessionIdleTime;
+                if (systemIdleTime === 0 && this.idleSessionTime >= IDLE_SESSION_MIN_DURATION) {
+                    this.savedIdleTime += this.idleSessionTime;
                 }
-                this.sessionIdleTime = sessionIdleTime;
+                this.idleSessionTime = systemIdleTime;
 
                 if (oldIdleTime !== this.idleTime) {
                     this.dispatchChanges();
@@ -47,7 +51,7 @@ class IdleMonitor extends EventEmitter {
 
     reset() {
         this.savedIdleTime = 0;
-        this.sessionIdleTime = 0;
+        this.idleSessionTime = 0;
         this.dispatchChanges();
     }
 

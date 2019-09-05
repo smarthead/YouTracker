@@ -61,6 +61,18 @@ class MainService extends EventEmitter {
             this.session.trackingService.add(item);
         }
     }
+
+    acceptIdleTime() {
+        if (this.session) {
+            this.session.trackingService.acceptIdleTime();
+        }
+    }
+
+    subtractIdleTime() {
+        if (this.session) {
+            this.session.trackingService.subtractIdleTime();
+        }
+    }
     
     reloadIssues() {
         if (this.session) {

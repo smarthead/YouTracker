@@ -110,11 +110,11 @@ class TrackingService extends EventEmitter {
         });
     }
 
-    resetIdleTime() {
+    acceptIdleTime() {
         this.idleMonitor.reset();
     }
 
-    subtrackIdleTime() {
+    subtractIdleTime() {
         if (!this._current) return;
         
         this._current.idleMinutes.subtracted += this._current.idleMinutes.current;

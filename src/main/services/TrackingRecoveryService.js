@@ -27,7 +27,7 @@ class TrackingRecoveryService {
             issueId,
             startTime,
             lastTime: new Date(),
-            subtracted
+            subtracted: 0
         }
         this.store(this.recoverTracking);
         
