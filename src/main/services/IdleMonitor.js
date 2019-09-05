@@ -27,6 +27,9 @@ class IdleMonitor extends EventEmitter {
         this.reset();
 
         this.updateInterval = setInterval(() => {
+
+            // TODO не учитывается блокировка компьютера. Использовать getSystemIdleState(idleThreshold)
+
             // TODO Заменить на powerMonitor.getSystemIdleTime() после обновления до Electron 6
             powerMonitor.querySystemIdleTime((systemIdleTime) => {
                 const oldIdleTime = this.idleTime;

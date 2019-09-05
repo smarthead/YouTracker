@@ -4,6 +4,7 @@ import urls from '../../../common/urls';
 import ipc from '../../ipc';
 import { makeIssueContextMenu } from '../../menu/issueContextMenu';
 import styles from './Toolbar.css';
+import IdleBanner from './IdleBanner';
 
 const TIMER_UPDATE_INTERVAL = 5 * 1000; // 5 sec
 
@@ -16,6 +17,9 @@ const Toolbar = ({ current }) => {
             spentTime = null
         } = {},
         isActive = false,
+        idleMinutes: {
+            current: idleMinutes = 0
+        } = {},
         startTime = null,
         endTime = null
     } = current ? current : {};
@@ -95,6 +99,12 @@ const Toolbar = ({ current }) => {
                     {spentTime ? spentTime.presentation : ''}
                 </div>
             </div>
+
+            {
+                idleMinutes > 0
+                ? <IdleBanner idleMinutes={idleMinutes} />
+                : ''
+            }
         </div>
     );
 }
@@ -115,6 +125,8 @@ const timeComponents = (start, end) => {
     
     minutes %= 60;
     
+    // TODO вычитать idleMinutes.subtracted
+
     return {
         hours: `${hours}`,
         minutes: `${minutes < 10 ? '0' + minutes : minutes}`
