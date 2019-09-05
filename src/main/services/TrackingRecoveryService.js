@@ -26,7 +26,8 @@ class TrackingRecoveryService {
         this.recoverTracking = {
             issueId,
             startTime,
-            lastTime: new Date()
+            lastTime: new Date(),
+            subtracted
         }
         this.store(this.recoverTracking);
         
@@ -41,6 +42,12 @@ class TrackingRecoveryService {
         
         this.recoverTracking = null;
         this.clear();
+    }
+
+    updateSubtractedMinutes(subtracted) {
+        if (!recoverTracking) return;
+        this.recoverTracking.subtracted = subtracted;
+        this.store(this.recoverTracking);
     }
     
     // Private
@@ -57,6 +64,7 @@ class TrackingRecoveryService {
             issueId: item.issueId,
             startTime: new Date(item.startTime),
             lastTime: new Date(item.lastTime),
+            subtracted: item.subtracted
         }
     }
     
