@@ -2,48 +2,28 @@ import { powerMonitor } from 'electron';
 import { EventEmitter } from 'events';
 
 
-const UPDATE_INTERVAL = 1000; // 1 s
+const UPDATE_INTERVAL = 1500; // 5 s
 
-// Минимальная продолжительность сессии неактивности
-// TODO 60 seconds
-const IDLE_SESSION_MIN_DURATION = 5;
+// TODO 60 s
+const IDLE_THRESHOLD = 5; // 5s
 
 class IdleMonitor extends EventEmitter {
     constructor() {
         super();
-        this.savedIdleTime = 0;
-        this.idleSessionTime = 0;
+        this._idleTime = 0;
+        this.lastActivityTime = null;
+        this.isActive = true;
     }
 
     get idleTime() {
-        let idleTime = this.savedIdleTime;
-        if (this.idleSessionTime >= IDLE_SESSION_MIN_DURATION) {
-            idleTime += this.idleSessionTime;
-        }
-        return idleTime;
+        return this._idleTime;
     }
 
     start() {
         this.reset();
 
         this.updateInterval = setInterval(() => {
-
-            // TODO не учитывается блокировка компьютера. Использовать getSystemIdleState(idleThreshold)
-
-            // TODO Заменить на powerMonitor.getSystemIdleTime() после обновления до Electron 6
-            powerMonitor.querySystemIdleTime((systemIdleTime) => {
-                const oldIdleTime = this.idleTime;
-
-                // New idle session
-                if (systemIdleTime === 0 && this.idleSessionTime >= IDLE_SESSION_MIN_DURATION) {
-                    this.savedIdleTime += this.idleSessionTime;
-                }
-                this.idleSessionTime = systemIdleTime;
-
-                if (oldIdleTime !== this.idleTime) {
-                    this.dispatchChanges();
-                }
-            });
+            this.checkIdleState();
         }, UPDATE_INTERVAL);
     }
 
@@ -53,12 +33,37 @@ class IdleMonitor extends EventEmitter {
     }
 
     reset() {
-        this.savedIdleTime = 0;
-        this.idleSessionTime = 0;
+        this._idleTime = 0;
+        this.lastActivityTime = new Date();
+        this.isActive = true;
         this.dispatchChanges();
     }
 
     // Private
+
+    checkIdleState() {
+        if (!this.lastActivityTime) return;
+
+        // TODO После обновления до Electron 6
+        // заменить на powerMonitor.getSystemIdleState
+        powerMonitor.querySystemIdleState(IDLE_THRESHOLD, (idleState) => {
+            const newIsActive = idleState === 'active';
+            if (!this.isActive && newIsActive) {
+                const now = new Date();
+
+                this._idleTime += Math.floor(
+                    (now.getTime() - this.lastActivityTime.getTime()) / 1000
+                );
+
+                this.lastActivityTime = now;
+                this.isActive = true;
+
+                this.dispatchChanges();
+            } else {
+                this.isActive = newIsActive;
+            }
+        });
+    }
 
     dispatchChanges() {
         this.emit('changed');
