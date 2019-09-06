@@ -45,7 +45,7 @@ class TrackingRecoveryService {
     }
 
     updateSubtractedMinutes(subtracted) {
-        if (!recoverTracking) return;
+        if (!this.recoverTracking) return;
         this.recoverTracking.subtracted = subtracted;
         this.store(this.recoverTracking);
     }

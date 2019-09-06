@@ -2,11 +2,14 @@
     background-color: #282c34;
     border-bottom: 1px solid #ffffff33;
     position: sticky;
-    padding: 10px 16px 8px 10px;
     top: 0;
     left: 0;
     right: 0;
     z-index: 1000;
+}
+
+.toolbarIssue {
+    padding: 10px 16px 8px 10px;
 }
 
 .left {

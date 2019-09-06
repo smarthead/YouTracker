@@ -70,6 +70,14 @@ ipcMain.on('add-work-item', (event, item) => {
     mainService.addWorkItem(item);
 });
 
+ipcMain.on('accept-idle-time', (event, arg) => {
+    mainService.acceptIdleTime();
+});
+
+ipcMain.on('subtract-idle-time', (event, arg) => {
+    mainService.subtractIdleTime();
+});
+
 ipcMain.on('logIn', (event, { login, password }) => {
     mainService.logIn(login, password);
 });
