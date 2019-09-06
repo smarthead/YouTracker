@@ -10,9 +10,11 @@ const IDLE_THRESHOLD = 5; // 5s
 class IdleMonitor extends EventEmitter {
     constructor() {
         super();
+
         this._idleTime = 0;
         this.lastActivityTime = null;
         this.isActive = true;
+        this.isStarted = false;
     }
 
     get idleTime() {
@@ -20,15 +22,20 @@ class IdleMonitor extends EventEmitter {
     }
 
     start() {
+        if (this.isStarted) return;
+        this.isStarted = true;
+
         this.reset();
 
         this.updateInterval = setInterval(() => {
-            this.checkIdleState();
+            this.updateIdleState();
         }, UPDATE_INTERVAL);
     }
 
     stop() {
-        if (!this.updateInterval) return;
+        if (!this.isStarted) return;
+        this.isStarted = false;
+
         clearInterval(this.updateInterval);
     }
 
@@ -39,10 +46,8 @@ class IdleMonitor extends EventEmitter {
         this.dispatchChanges();
     }
 
-    // Private
-
-    checkIdleState() {
-        if (!this.lastActivityTime) return;
+    updateIdleState() {
+        if (!this.isStarted || !this.lastActivityTime) return;
 
         // TODO После обновления до Electron 6
         // заменить на powerMonitor.getSystemIdleState
@@ -64,6 +69,8 @@ class IdleMonitor extends EventEmitter {
             }
         });
     }
+
+    // Private
 
     dispatchChanges() {
         this.emit('changed');

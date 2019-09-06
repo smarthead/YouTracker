@@ -2,9 +2,10 @@ import { EventEmitter } from 'events';
 import TrackingRecoveryService from './TrackingRecoveryService';
 import IdleMonitor from './IdleMonitor';
 
+const WORK_ITEM_MIN_DURATION = 30 * 1000; // 30 s
 
-const MIN_DURATION = 30 * 1000; // 30 s
-
+// TODO 5 m?
+const IDLE_WARNING_THRESHOLD = 1; // 1m
 
 class TrackingService extends EventEmitter {
     
@@ -31,6 +32,7 @@ class TrackingService extends EventEmitter {
             const idleMinutes = Math.floor(this.idleMonitor.idleTime / 60);
             if (this._current && this._current.idleMinutes.current !== idleMinutes) {
                 this._current.idleMinutes.current = idleMinutes;
+                this._current.idleWarningIsShown = idleMinutes >= IDLE_WARNING_THRESHOLD;
                 this.dispatchChanges();
             }
         });
@@ -48,6 +50,7 @@ class TrackingService extends EventEmitter {
         this._current = {
             issue,
             isActive: true,
+            idleWarningIsShown: false,
             idleMinutes: {
                 current: 0,
                 subtracted: 0
@@ -82,6 +85,7 @@ class TrackingService extends EventEmitter {
         
         this._current.endTime = endTime;
         this._current.isActive = false;
+        this._current.idleWarningIsShown = false;
         this._current.idleMinutes.current = 0;
 
         if (isValid) {
@@ -108,6 +112,10 @@ class TrackingService extends EventEmitter {
             date: today.getTime(),
             minutes
         });
+    }
+
+    updateIdleState() {
+        this.idleMonitor.updateIdleState();
     }
 
     acceptIdleTime() {
@@ -165,7 +173,7 @@ const workItemTime = (startTime, endTime, subtracted) => {
     
     return {
         time, minutes,
-        isValid: time > MIN_DURATION
+        isValid: time > WORK_ITEM_MIN_DURATION
     }
 };
 

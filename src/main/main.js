@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, Menu, shell } from 'electron';
+import { app, BrowserWindow, ipcMain, Menu, shell, powerMonitor } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import isDev from './utils/isDev';
 import isMac from '../common/isMac';
@@ -36,8 +36,16 @@ const createWindow = () => {
 app.on('ready', () => {
     createWindow();
     updateMenu(mainService.state);
+
     mainService.initialize();
     autoUpdater.checkForUpdatesAndNotify();
+
+    powerMonitor.on('unlock-screen', () => {
+        mainService.updateIdleState();
+        if (mainService.idleWarningIsShown) {
+            app.focus();
+        }
+    });
 });
 
 app.on('window-all-closed', () => {

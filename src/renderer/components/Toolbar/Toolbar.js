@@ -17,6 +17,7 @@ const Toolbar = ({ current }) => {
             spentTime = null
         } = {},
         isActive = false,
+        idleWarningIsShown = false,
         idleMinutes: {
             current: currentIdleMinutes = 0,
             subtracted: subtractedIdleMinutes = 0
@@ -26,7 +27,6 @@ const Toolbar = ({ current }) => {
     } = current ? current : {};
     
     const disabled = !current;
-    const idleBannerIsShown = currentIdleMinutes > 0;
     
     const [time, setTime] = useState(timeComponents(startTime, endTime, subtractedIdleMinutes));
     
@@ -105,7 +105,7 @@ const Toolbar = ({ current }) => {
             </div>
 
             {
-                idleBannerIsShown
+                idleWarningIsShown
                 ? <IdleBanner idleMinutes={currentIdleMinutes} />
                 : ''
             }
