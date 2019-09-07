@@ -18,17 +18,17 @@
     "@babel/preset-react": "^7.0.0",
     "babel-loader": "^8.0.6",
     "css-loader": "^3.2.0",
-    "electron": "^5.0.1",
-    "electron-builder": "^20.40.2",
+    "electron": "^6.0.2",
+    "electron-builder": "^21.2.0",
     "node-loader": "^0.6.0",
     "style-loader": "^1.0.0",
     "webpack": "^4.39.2",
     "webpack-cli": "^3.3.7"
   },
   "dependencies": {
-    "electron-store": "^3.2.0",
+    "electron-store": "^3.3.0",
     "electron-updater": "^4.1.2",
-    "keytar": "^4.9.0",
+    "keytar": "^4.13.0",
     "node-fetch": "^2.6.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6"

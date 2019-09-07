@@ -49,25 +49,23 @@ class IdleMonitor extends EventEmitter {
     updateIdleState() {
         if (!this.isStarted || !this.lastActivityTime) return;
 
-        // TODO После обновления до Electron 6
-        // заменить на powerMonitor.getSystemIdleState
-        powerMonitor.querySystemIdleState(IDLE_THRESHOLD, (idleState) => {
-            const newIsActive = idleState === 'active';
-            if (!this.isActive && newIsActive) {
-                const now = new Date();
+        const idleState = powerMonitor.getSystemIdleState(IDLE_THRESHOLD);
+        const newIsActive = idleState === 'active';
 
-                this._idleTime += Math.floor(
-                    (now.getTime() - this.lastActivityTime.getTime()) / 1000
-                );
+        if (!this.isActive && newIsActive) {
+            const now = new Date();
 
-                this.lastActivityTime = now;
-                this.isActive = true;
+            this._idleTime += Math.floor(
+                (now.getTime() - this.lastActivityTime.getTime()) / 1000
+            );
 
-                this.dispatchChanges();
-            } else {
-                this.isActive = newIsActive;
-            }
-        });
+            this.lastActivityTime = now;
+            this.isActive = true;
+
+            this.dispatchChanges();
+        } else {
+            this.isActive = newIsActive;
+        }
     }
 
     // Private

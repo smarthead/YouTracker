@@ -12,8 +12,6 @@ const IdleBanner = ({ idleMinutes }) => {
         ipc.acceptIdleTime();
     };
 
-    // TODO Форматирование интервала
-
     return (
         <div className={styles.idleBanner}>
             Вы были неактивны {formatMinutes(idleMinutes)}.&nbsp;&nbsp;
