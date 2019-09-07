@@ -90,7 +90,11 @@ class WorkItemService extends EventEmitter {
     restoreWorkItems() {
         const workItems = store.get(`workItems-${this.userId}`);
         if (workItems) {
-            this.workItems = workItems;
+            this.workItems = workItems.map(item => ({
+                ...item,
+                startTime: new Date(item.startTime),
+                endTime: new Date(item.endTime),
+            }));
             console.log(`${workItems.length} work items restored`);
         }
     }
