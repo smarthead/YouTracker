@@ -6,7 +6,8 @@
   "main": "build/main.bundle.js",
   "scripts": {
     "start": "webpack --mode=development && electron .",
-    "publish": "webpack --mode=production && build --mac --win --linux --publish always",
+    "build": "webpack --mode=production && electron-builder --publish never",
+    "publish": "webpack --mode=production && electron-builder --mac --win --linux --publish always",
     "postinstall": "electron-builder install-app-deps"
   },
   "keywords": [],
