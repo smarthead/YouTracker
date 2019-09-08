@@ -17,10 +17,10 @@ const Toolbar = ({ current }) => {
             spentTime = null
         } = {},
         isActive = false,
-        idleWarningIsShown = false,
-        idleMinutes: {
-            current: currentIdleMinutes = 0,
-            subtracted: subtractedIdleMinutes = 0
+        idle: {
+            current: currentIdleTime = 0,
+            subtracted: subtractedIdleTime = 0,
+            warningIsShown: idleWarningIsShown = false
         } = {},
         startTime = null,
         endTime = null
@@ -28,21 +28,21 @@ const Toolbar = ({ current }) => {
     
     const disabled = !current;
     
-    const [time, setTime] = useState(timeComponents(startTime, endTime, subtractedIdleMinutes));
+    const [time, setTime] = useState(timeComponents(startTime, endTime, subtractedIdleTime));
     
     useEffect(() => {
         if (!isActive) return;
         
-        setTime(timeComponents(startTime, null, subtractedIdleMinutes));
+        setTime(timeComponents(startTime, null, subtractedIdleTime));
         
         const interval = setInterval(() => {
-            setTime(timeComponents(startTime, null, subtractedIdleMinutes));
+            setTime(timeComponents(startTime, null, subtractedIdleTime));
         }, TIMER_UPDATE_INTERVAL);
         
         return () => {
             clearInterval(interval);
         }
-    }, [isActive, startTime, subtractedIdleMinutes]);
+    }, [isActive, startTime, subtractedIdleTime]);
     
     const handleContextMenu = (event) => {
         if (disabled) return;
@@ -106,14 +106,14 @@ const Toolbar = ({ current }) => {
 
             {
                 idleWarningIsShown
-                ? <IdleBanner idleMinutes={currentIdleMinutes} />
+                ? <IdleBanner idleTime={currentIdleTime} />
                 : ''
             }
         </div>
     );
 }
 
-const timeComponents = (start, end, idleMinutes) => {
+const timeComponents = (start, end, idleTime) => {
     if (!start) {
         return { hours: '0', minutes: '00'};
     }
@@ -123,7 +123,7 @@ const timeComponents = (start, end, idleMinutes) => {
     
     const seconds = Math.floor(
         (endDate.getTime() - startDate.getTime()) / 1000
-    ) - idleMinutes * 60;
+    ) - idleTime;
     let minutes = Math.floor(seconds / 60);
     const hours = Math.floor(minutes / 60);
     

@@ -4,8 +4,8 @@ import { EventEmitter } from 'events';
 
 const UPDATE_INTERVAL = 1500; // 5 s
 
-// TODO 60 s
-const IDLE_THRESHOLD = 5; // 5s
+// TODO 300s (5 m)
+const IDLE_THRESHOLD = 5;
 
 class IdleMonitor extends EventEmitter {
     constructor() {
@@ -13,7 +13,6 @@ class IdleMonitor extends EventEmitter {
 
         this._idleTime = 0;
         this.lastActivityTime = null;
-        this.isActive = true;
         this.isStarted = false;
     }
 
@@ -28,7 +27,10 @@ class IdleMonitor extends EventEmitter {
         this.reset();
 
         this.updateInterval = setInterval(() => {
-            this.updateIdleState();
+            const idleState = powerMonitor.getSystemIdleState(1);
+            if (idleState === 'active') {
+                this.activateApp();
+            }
         }, UPDATE_INTERVAL);
     }
 
@@ -42,29 +44,21 @@ class IdleMonitor extends EventEmitter {
     reset() {
         this._idleTime = 0;
         this.lastActivityTime = new Date();
-        this.isActive = true;
         this.dispatchChanges();
     }
 
-    updateIdleState() {
+    activateApp() {
         if (!this.isStarted || !this.lastActivityTime) return;
 
-        const idleState = powerMonitor.getSystemIdleState(IDLE_THRESHOLD);
-        const newIsActive = idleState === 'active';
+        const now = new Date();
+        const timeFromLastActivity = Math.floor(
+            (now.getTime() - this.lastActivityTime.getTime()) / 1000
+        );
+        this.lastActivityTime = now;
 
-        if (!this.isActive && newIsActive) {
-            const now = new Date();
-
-            this._idleTime += Math.floor(
-                (now.getTime() - this.lastActivityTime.getTime()) / 1000
-            );
-
-            this.lastActivityTime = now;
-            this.isActive = true;
-
+        if (timeFromLastActivity >= IDLE_THRESHOLD) {
+            this._idleTime += timeFromLastActivity;
             this.dispatchChanges();
-        } else {
-            this.isActive = newIsActive;
         }
     }
 

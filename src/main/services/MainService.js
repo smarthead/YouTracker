@@ -62,16 +62,16 @@ class MainService extends EventEmitter {
         }
     }
 
-    updateIdleState() {
+    activateApp() {
         if (this.session) {
-            this.session.trackingService.updateIdleState();
+            this.session.trackingService.activateApp();
         }
     }
 
     get idleWarningIsShown() {
         if (this.session) {
             const current = this.session.trackingService.current;
-            return current ? current.idleWarningIsShown : false;
+            return current ? current.idle.warningIsShown : false;
         }
         return false;
     }

@@ -4,8 +4,8 @@ import IdleMonitor from './IdleMonitor';
 
 const WORK_ITEM_MIN_DURATION = 30 * 1000; // 30 s
 
-// TODO 5 m?
-const IDLE_WARNING_THRESHOLD = 1; // 1m
+// TODO 300s (5 m)
+const IDLE_WARNING_THRESHOLD = 5;
 
 class TrackingService extends EventEmitter {
     
@@ -26,16 +26,7 @@ class TrackingService extends EventEmitter {
     async initialize() {
         await this.recoverWorkItems();
         
-        this.idleMonitor.on('changed', () => {
-            console.log('Idle time', this.idleMonitor.idleTime);
-
-            const idleMinutes = Math.floor(this.idleMonitor.idleTime / 60);
-            if (this._current && this._current.idleMinutes.current !== idleMinutes) {
-                this._current.idleMinutes.current = idleMinutes;
-                this._current.idleWarningIsShown = idleMinutes >= IDLE_WARNING_THRESHOLD;
-                this.dispatchChanges();
-            }
-        });
+        this.idleMonitor.on('changed', () => this.handleIdleTimeChange());
     }
     
     destroy() {
@@ -50,10 +41,10 @@ class TrackingService extends EventEmitter {
         this._current = {
             issue,
             isActive: true,
-            idleWarningIsShown: false,
-            idleMinutes: {
+            idle: {
                 current: 0,
-                subtracted: 0
+                subtracted: 0,
+                warningIsShown: false
             },
             startTime,
             endTime: null
@@ -77,7 +68,7 @@ class TrackingService extends EventEmitter {
         
         const {
             issue, startTime,
-            idleMinutes: { subtracted }
+            idle: { subtracted }
         } = this._current;
 
         const endTime = new Date();
@@ -85,8 +76,8 @@ class TrackingService extends EventEmitter {
         
         this._current.endTime = endTime;
         this._current.isActive = false;
-        this._current.idleWarningIsShown = false;
-        this._current.idleMinutes.current = 0;
+        this._current.idle.current = 0;
+        this._current.idle.warningIsShown = false;
 
         if (isValid) {
             console.log(`Tracked ${minutes} m (${time} ms) in issue ${issue.idReadable} (${issue.id})`);
@@ -114,8 +105,8 @@ class TrackingService extends EventEmitter {
         });
     }
 
-    updateIdleState() {
-        this.idleMonitor.updateIdleState();
+    activateApp() {
+        this.idleMonitor.activateApp();
     }
 
     acceptIdleTime() {
@@ -125,9 +116,9 @@ class TrackingService extends EventEmitter {
     subtractIdleTime() {
         if (!this._current) return;
         
-        this._current.idleMinutes.subtracted += this._current.idleMinutes.current;
+        this._current.idle.subtracted += this._current.idle.current;
 
-        this.recoveryService.updateSubtractedMinutes(this._current.idleMinutes.subtracted);
+        this.recoveryService.updateSubtracted(this._current.idle.subtracted);
         this.idleMonitor.reset();
     }
     
@@ -162,13 +153,27 @@ class TrackingService extends EventEmitter {
         }
     }
 
+    handleIdleTimeChange() {
+        if (!this._current) return;
+
+        const idleTime = this.idleMonitor.idleTime;
+
+        console.log(`Idle ${idleTime}s`);
+
+        if (this._current.idle.current !== idleTime) {
+            this._current.idle.current = idleTime;
+            this._current.idle.warningIsShown = idleTime >= IDLE_WARNING_THRESHOLD;
+            this.dispatchChanges();
+        }
+    }
+
     dispatchChanges() {
         this.emit('changed');
     }
 }
 
 const workItemTime = (startTime, endTime, subtracted) => {
-    const time = endTime.getTime() - startTime.getTime() - subtracted * 60 * 1000;
+    const time = endTime.getTime() - startTime.getTime() - subtracted * 1000;
     const minutes = Math.ceil(time / 1000 / 60);
     
     return {

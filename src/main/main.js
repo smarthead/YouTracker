@@ -41,7 +41,7 @@ app.on('ready', () => {
     autoUpdater.checkForUpdatesAndNotify();
 
     powerMonitor.on('unlock-screen', () => {
-        mainService.updateIdleState();
+        mainService.activateApp();
         if (mainService.idleWarningIsShown) {
             app.focus();
         }
