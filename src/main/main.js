@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, Menu, shell, powerMonitor } from 'electron';
+import { app, BrowserWindow, ipcMain, Menu, shell } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import isDev from './utils/isDev';
 import isMac from '../common/isMac';

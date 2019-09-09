@@ -1,7 +1,6 @@
 import { powerMonitor } from 'electron';
 import { EventEmitter } from 'events';
 
-
 const UPDATE_INTERVAL = 1500; // 5 s
 
 // Минимальное время бездествия, считающееся периодом неактивности

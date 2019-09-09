@@ -1,6 +1,6 @@
 {
     "presets": [
         ["@babel/preset-react"],
-        ["@babel/env", { "targets": { "electron": "5" } }]
+        ["@babel/env", { "targets": { "electron": "6" } }]
     ]
 }
