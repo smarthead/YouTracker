@@ -1,5 +1,6 @@
 import { app, Menu } from 'electron';
 import isMac from '../../common/isMac';
+import isDev from '../utils/isDev';
 
 export const makeMainMenu = (appState, onReload, onLogOut, onOpenIssuesInYouTrack) => {
     const appName = app.getName();
@@ -107,30 +108,20 @@ export const makeMainMenu = (appState, onReload, onLogOut, onOpenIssuesInYouTrac
                 label: 'Открыть на YouTrack...',
                 click: onOpenIssuesInYouTrack
             }
-            // TODO Сделать возможность настройки и отключения группировки
-            //
-            // { type: 'separator' },
-            // {
-            //     label: 'Группировка',
-            //     submenu: [
-            //         {
-            //             label: 'Нет',
-            //             type: 'radio',
-            //             checked: false
-            //         },
-            //         {
-            //             label: 'По проекту',
-            //             type: 'radio',
-            //             checked: true
-            //         }
-            //     ]
-            // }
+        ]
+    };
+
+    const developerMenu = {
+        label: 'Developer',
+        submenu: [
+            { role: 'toggleDevTools' }
         ]
     };
 
     return Menu.buildFromTemplate([
         fileMenu,
         editMenu,
-        issuesMenu
+        issuesMenu,
+        ...(isDev ? [developerMenu] : [])
     ]);
 };

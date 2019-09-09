@@ -9,12 +9,12 @@ const common = {
     rules: [
       {
         test: /\.js$/,
-        include: __dirname + '/src',
+        include: path.resolve(__dirname, 'src'),
         loader: 'babel-loader'
-       },
-       {
+      },
+      {
         test: /\.css$/,
-        include: __dirname + '/src',
+        include: path.resolve(__dirname, 'src'),
         use: [
           {
             loader: 'style-loader'

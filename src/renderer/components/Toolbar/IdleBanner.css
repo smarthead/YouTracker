@@ -1,0 +1,22 @@
+.idleBanner {
+    background-color: #f8b133;
+    color: black;
+    font-size: 0.9em;
+    padding: 13px 34px;
+    position: relative;
+}
+
+.subtractButton {
+    color: black;
+    font-weight: bold;
+    text-decoration: underline;
+    padding: 0;
+}
+
+.closeButton {
+    color: black;
+    font-size: 1.7rem;
+    position: absolute;
+    top: 3px;
+    right: 8px;
+}

@@ -51,7 +51,7 @@ const SearchBar = (props) => {
                 onClick={handleClearClick}
                 hidden={query === ''}
             >
-                <i className="fas fa-times" />
+                ×
             </button>
         </div>
     );

@@ -6,7 +6,6 @@
     bottom: 0;
     left: 0;
     right: 0;
-    height: 24px;
     z-index: 900;
 }
 
@@ -19,6 +18,7 @@
     color: white;
     font-size: 1em;
     padding-bottom: 4px;
+    padding-right: 16px;
 }
 
 .field:focus {
@@ -27,9 +27,10 @@
 
 .clearButton {
     color: #ffffff66;
+    font-size: 1.7rem;
     position: absolute;
-    top: 8px;
-    right: 12px;
+    top: 2px;
+    right: 8px;
 }
 
 .clearButton:hover {

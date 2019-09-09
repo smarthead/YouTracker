@@ -12,4 +12,12 @@ const addWorkItem = (issueId, minutes) => () => {
     ipcRenderer.send('add-work-item', { issueId, minutes });
 };
 
-export default { startTracking, stopTracking, addWorkItem };
+const acceptIdleTime = () => {
+    ipcRenderer.send('accept-idle-time');
+};
+
+const subtractIdleTime = () => {
+    ipcRenderer.send('subtract-idle-time');
+};
+
+export default { startTracking, stopTracking, addWorkItem, acceptIdleTime, subtractIdleTime };
