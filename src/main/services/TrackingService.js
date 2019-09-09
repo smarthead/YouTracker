@@ -1,6 +1,7 @@
 import { EventEmitter } from 'events';
 import TrackingRecoveryService from './TrackingRecoveryService';
 import IdleMonitor from './IdleMonitor';
+import IdleNotifier from './IdleNotifier';
 
 const WORK_ITEM_MIN_DURATION = 30 * 1000; // 30 s
 
@@ -15,6 +16,11 @@ class TrackingService extends EventEmitter {
         this.workItemService = workItemService;
         this.recoveryService = new TrackingRecoveryService();
         this.idleMonitor = new IdleMonitor();
+        
+        this.idleNotifier = new IdleNotifier(() => {
+            this.idleMonitor.activateApp();
+            return this.current;
+        });
 
         this._current = null;
     }
@@ -27,6 +33,7 @@ class TrackingService extends EventEmitter {
         await this.recoverWorkItems();
         
         this.idleMonitor.on('changed', () => this.handleIdleTimeChange());
+        this.idleNotifier.initialize();
     }
     
     destroy() {
@@ -52,6 +59,7 @@ class TrackingService extends EventEmitter {
         
         this.recoveryService.start(issue.id, startTime);
         this.idleMonitor.start();
+        this.idleNotifier.start();
         
         console.log(`Start tracking issue ${issue.idReadable} (${issue.id})`);
         
@@ -63,6 +71,7 @@ class TrackingService extends EventEmitter {
             return;
         }
         
+        this.idleNotifier.stop();
         this.idleMonitor.stop();
         this.recoveryService.stop();
         
@@ -103,10 +112,6 @@ class TrackingService extends EventEmitter {
             date: today.getTime(),
             minutes
         });
-    }
-
-    activateApp() {
-        this.idleMonitor.activateApp();
     }
 
     acceptIdleTime() {

@@ -36,16 +36,8 @@ const createWindow = () => {
 app.on('ready', () => {
     createWindow();
     updateMenu(mainService.state);
-
     mainService.initialize();
     autoUpdater.checkForUpdatesAndNotify();
-
-    powerMonitor.on('unlock-screen', () => {
-        mainService.activateApp();
-        if (mainService.idleWarningIsShown) {
-            app.focus();
-        }
-    });
 });
 
 app.on('window-all-closed', () => {
