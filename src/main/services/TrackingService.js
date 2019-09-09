@@ -5,8 +5,8 @@ import IdleNotifier from './IdleNotifier';
 
 const WORK_ITEM_MIN_DURATION = 30 * 1000; // 30 s
 
-// TODO 300s (5 m)
-const IDLE_WARNING_THRESHOLD = 5;
+// Минимальное суммарное время неактивности, при котором показывается предупреждение
+const IDLE_WARNING_THRESHOLD = 300; // 5 m
 
 class TrackingService extends EventEmitter {
     
@@ -115,6 +115,7 @@ class TrackingService extends EventEmitter {
     }
 
     acceptIdleTime() {
+        console.log('Idle time accepted');
         this.idleMonitor.reset();
     }
 
@@ -122,8 +123,10 @@ class TrackingService extends EventEmitter {
         if (!this._current) return;
         
         this._current.idle.subtracted += this._current.idle.current;
-
         this.recoveryService.updateSubtracted(this._current.idle.subtracted);
+
+        console.log('Idle time subtracted');
+
         this.idleMonitor.reset();
     }
     
@@ -163,7 +166,7 @@ class TrackingService extends EventEmitter {
 
         const idleTime = this.idleMonitor.idleTime;
 
-        console.log(`Idle ${idleTime}s`);
+        console.log(`Idle time: ${idleTime}s`);
 
         if (this._current.idle.current !== idleTime) {
             this._current.idle.current = idleTime;

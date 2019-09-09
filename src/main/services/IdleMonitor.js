@@ -4,8 +4,8 @@ import { EventEmitter } from 'events';
 
 const UPDATE_INTERVAL = 1500; // 5 s
 
-// TODO 300s (5 m)
-const IDLE_THRESHOLD = 5;
+// Минимальное время бездествия, считающееся периодом неактивности
+const IDLE_PERIOD_THRESHOLD = 300; // 5 m
 
 class IdleMonitor extends EventEmitter {
     constructor() {
@@ -56,7 +56,7 @@ class IdleMonitor extends EventEmitter {
         );
         this.lastActivityTime = now;
 
-        if (timeFromLastActivity >= IDLE_THRESHOLD) {
+        if (timeFromLastActivity >= IDLE_PERIOD_THRESHOLD) {
             this._idleTime += timeFromLastActivity;
             this.dispatchChanges();
         }
