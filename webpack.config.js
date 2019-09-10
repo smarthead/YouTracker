@@ -30,8 +30,8 @@ const common = {
         ]
       },
       {
-        test: /\.node$/,
-        loader: 'node-loader'
+        test: /keytar.node$/,
+        loader: path.resolve('./webpack.nodeloader.js')
       }
     ],
   }
