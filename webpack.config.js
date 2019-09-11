@@ -31,7 +31,7 @@ const common = {
       },
       {
         test: /\.node$/,
-        loader: 'node-loader'
+        loader: path.resolve('./webpack.nodeloader.js')
       }
     ],
   }
