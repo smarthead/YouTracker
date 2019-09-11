@@ -1,19 +1,20 @@
-module.exports = function(content) {    
-    const url = 'build/keytar.node';
+const path = require('path');
 
-    this.emitFile('keytar.node', content);
+module.exports = function(content) {
+    this.addDependency(this.resourcePath);
 
-    console.log('final path', url);
+    const relativePath = path.relative(__dirname, this.resourcePath);
 
-
-    return (
-        "try { global.process.dlopen(module, '" +
-        url +
-        "'); } catch(e) {" +
-        "throw new Error('Cannot open ' + '" +
-        url +
-        "' + ': ' + e);}"
-    );
+    return (`
+        const path = require('path');
+        const { app } = require('electron');
+        const filePath = path.resolve(app.getAppPath(), '${relativePath}');
+        try {
+            global.process.dlopen(module, filePath);
+        } catch (e) {
+            throw new Error('Cannot open ' + filePath + ': ' + e);
+        }
+    `);
 };
 
 module.exports.raw = true;
