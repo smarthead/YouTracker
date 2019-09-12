@@ -7,93 +7,108 @@ import MainService from './services/MainService';
 import { makeMainMenu } from './menu/mainMenu';
 
 let mainWindow = null;
-const mainService = new MainService();
+let mainService = null;
 
-const createWindow = () => {
-    mainWindow = new BrowserWindow({
-        width: 800,
-        height: 600,
-        minWidth: 200,
-        backgroundColor: "#282c34",
-        webPreferences: {
-            nodeIntegration: true,
-            scrollBounce: true,
-            devTools: isDev
+if (!app.requestSingleInstanceLock()) {
+    app.quit();
+
+} else {
+    mainService = new MainService();
+
+    const createWindow = () => {
+        mainWindow = new BrowserWindow({
+            width: 800,
+            height: 600,
+            minWidth: 200,
+            backgroundColor: "#282c34",
+            webPreferences: {
+                nodeIntegration: true,
+                scrollBounce: true,
+                devTools: isDev
+            }
+        });
+        
+        mainWindow.loadFile('static/index.html');
+        
+        mainWindow.on('closed', () => {
+            mainWindow = null;
+        });
+        
+        mainWindow.webContents.on('did-finish-load', () => {
+            sendAppState(mainService.state);
+        });
+    }
+
+    app.on('ready', () => {
+        createWindow();
+        updateMenu(mainService.state);
+        mainService.initialize();
+        autoUpdater.checkForUpdatesAndNotify();
+    });
+
+    app.on('second-instance', () => {
+        if (mainWindow) {
+            if (mainWindow.isMinimized()) {
+                mainWindow.restore();
+            }
+            mainWindow.focus();
         }
     });
-    
-    mainWindow.loadFile('static/index.html');
-    
-    mainWindow.on('closed', () => {
-        mainWindow = null;
+
+    app.on('window-all-closed', () => {
+        if (!isMac) {
+            app.quit();
+        }
     });
-    
-    mainWindow.webContents.on('did-finish-load', () => {
-        sendAppState(mainService.state);
+
+    app.on('activate', () => {
+        // macOS
+        if (mainWindow === null) {
+            createWindow();
+        }
     });
+
+    const sendAppState = (appState) => {
+        if (mainWindow === null) return;
+        mainWindow.webContents.send('app-state-updated', appState);
+    };
+
+    ipcMain.on('start-tracking', (event, issueId) => {
+        mainService.startTracking(issueId);
+    });
+
+    ipcMain.on('stop-tracking', (event, arg) => {
+        mainService.stopTracking();
+    });
+
+    ipcMain.on('add-work-item', (event, item) => {
+        mainService.addWorkItem(item);
+    });
+
+    ipcMain.on('accept-idle-time', (event, arg) => {
+        mainService.acceptIdleTime();
+    });
+
+    ipcMain.on('subtract-idle-time', (event, arg) => {
+        mainService.subtractIdleTime();
+    });
+
+    ipcMain.on('logIn', (event, { login, password }) => {
+        mainService.logIn(login, password);
+    });
+
+    mainService.on('changed', () => {
+        const state = mainService.state;
+        sendAppState(state);
+        updateMenu(state);
+    });
+
+    const updateMenu = (appState) => {
+        Menu.setApplicationMenu(makeMainMenu(
+            appState,
+            () => mainService.reloadIssues(),
+            () => mainService.logOut(),
+            () => shell.openExternal(urls.viewAllIssues)
+        ));
+    };
 }
-
-app.on('ready', () => {
-    createWindow();
-    updateMenu(mainService.state);
-    mainService.initialize();
-    autoUpdater.checkForUpdatesAndNotify();
-});
-
-app.on('window-all-closed', () => {
-    if (!isMac) {
-        app.quit();
-    }
-});
-
-app.on('activate', () => {
-    // macOS
-    if (mainWindow === null) {
-        createWindow();
-    }
-});
-
-const sendAppState = (appState) => {
-    if (mainWindow === null) return;
-    mainWindow.webContents.send('app-state-updated', appState);
-};
-
-ipcMain.on('start-tracking', (event, issueId) => {
-    mainService.startTracking(issueId);
-});
-
-ipcMain.on('stop-tracking', (event, arg) => {
-    mainService.stopTracking();
-});
-
-ipcMain.on('add-work-item', (event, item) => {
-    mainService.addWorkItem(item);
-});
-
-ipcMain.on('accept-idle-time', (event, arg) => {
-    mainService.acceptIdleTime();
-});
-
-ipcMain.on('subtract-idle-time', (event, arg) => {
-    mainService.subtractIdleTime();
-});
-
-ipcMain.on('logIn', (event, { login, password }) => {
-    mainService.logIn(login, password);
-});
-
-mainService.on('changed', () => {
-    const state = mainService.state;
-    sendAppState(state);
-    updateMenu(state);
-});
-
-const updateMenu = (appState) => {
-    Menu.setApplicationMenu(makeMainMenu(
-        appState,
-        () => mainService.reloadIssues(),
-        () => mainService.logOut(),
-        () => shell.openExternal(urls.viewAllIssues)
-    ));
-};
-    
