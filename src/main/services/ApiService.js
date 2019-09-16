@@ -6,12 +6,20 @@ class ApiService {
         this.authService = authService;
     }
     
-    async getIssues() {
-        const response = await this.authService.authorizedFetch(urls.getIssues, {
+    async getIssues(query) {
+        const response = await this.authService.authorizedFetch(urls.getIssues(query), {
             headers
         });
         
         return response.ok ? await response.json() : [];
+    }
+
+    async validateIssuesQuery(query) {
+        const response = await this.authService.authorizedFetch(urls.getIssues(query), {
+            method: 'HEAD'
+        });
+
+        return response.ok;
     }
     
     async postWorkItem({ issueId, date, minutes, startTime, endTime }) {

@@ -108,7 +108,8 @@ if (!app.requestSingleInstanceLock()) {
             appState,
             () => mainService.reloadIssues(),
             () => mainService.logOut(),
-            () => shell.openExternal(urls.viewAllIssues)
+            // TODO query
+            () => shell.openExternal(urls.viewAllIssues('for: me #Unresolved sort by: created'))
         ));
     };
 }
