@@ -97,6 +97,10 @@ if (!app.requestSingleInstanceLock()) {
         mainService.logIn(login, password);
     });
 
+    ipcMain.on('change-issues-query', (event, query) => {
+        mainService.setQuery(query);
+    });
+
     mainService.on('changed', () => {
         const state = mainService.state;
         sendAppState(state);

@@ -20,4 +20,12 @@ const subtractIdleTime = () => {
     ipcRenderer.send('subtract-idle-time');
 };
 
-export default { startTracking, stopTracking, addWorkItem, acceptIdleTime, subtractIdleTime };
+const changeIssuesQuery = (query) => {
+    ipcRenderer.send('change-issues-query', query);
+}
+
+export default {
+    startTracking, stopTracking, addWorkItem,
+    acceptIdleTime, subtractIdleTime,
+    changeIssuesQuery
+};

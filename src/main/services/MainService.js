@@ -79,11 +79,18 @@ class MainService extends EventEmitter {
             this.session.issueService.reload();
         }
     }
+
+    setQuery(query) {
+        if (this.session) {
+            this.session.issueService.setQuery(query);
+        }
+    }
     
     get state() {
         return {
             isAuthorized: this.authService.isAuthorized,
             state: this.session ? {
+                query: this.session.issueService.query,
                 issues: this.session.issueService.issues,
                 current: this.session.trackingService.current
             } : null

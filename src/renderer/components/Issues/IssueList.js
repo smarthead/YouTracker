@@ -2,34 +2,36 @@ import React, { useState } from 'react';
 import IssueGroup from './IssueGroup';
 import SearchBar from '../SearchBar/SearchBar';
 import styles from './IssueList.css';
+import QueryBar from '../Query/QueryBar';
 
-const IssueList = ({ issues, current }) => {
+const IssueList = ({ query, issues, current }) => {
     const activeIssueId = current && current.isActive ? current.issue.id : null;
     
-    const [query, setQuery] = useState('');
+    const [search, setSearch] = useState('');
 
-    const queryLowerCased = query.toLowerCase();
+    const searchLowerCased = search.toLowerCase();
     const groups = group(
-        issues.filter(issue => satisfies(issue, queryLowerCased)),
+        issues.filter(issue => satisfies(issue, searchLowerCased)),
         issue => ({ ...issue.project })
     );
 
     return (
         <div className={styles.issueList}>
+            <QueryBar query={query}/>
             <div>
                 {groups.map(group => (
                     <IssueGroup key={group.id} group={group} activeIssueId={activeIssueId}/>
                 ))}
             </div>
-            <SearchBar query={query} onQueryChange={setQuery}/>
+            <SearchBar search={search} onSearchChange={setSearch}/>
         </div>
     );
 }
 
-const satisfies = (issue, query) => {
+const satisfies = (issue, search) => {
     const idReadable = issue.idReadable.toLowerCase();
     const summary = issue.summary.toLowerCase();
-    return idReadable.includes(query) || summary.includes(query);
+    return idReadable.includes(search) || summary.includes(search);
 }
 
 const group = (issues, grouper) => {

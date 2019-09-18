@@ -3,14 +3,14 @@ import isMac from '../../../common/isMac';
 import styles from './SearchBar.css';
 
 const SearchBar = (props) => {
-    const { query, onQueryChange } = props;
+    const { search, onSearchChange } = props;
 
-    const handleQueryChange = (event) => {
-        onQueryChange(event.target.value);
+    const handleSearchChange = (event) => {
+        onSearchChange(event.target.value);
     }
 
-    const handleClearClick = (event) => {
-        onQueryChange('');
+    const handleClearClick = () => {
+        onSearchChange('');
     };
     
     const inputRef = createRef();
@@ -20,21 +20,21 @@ const SearchBar = (props) => {
             // Clear search on Escape
             if (event.key === 'Escape') {
                 inputRef.current.blur();
-                onQueryChange('');
+                onSearchChange('');
             }
             // Set focus on Cmd/Ctrl+F
             if (event.code === 'KeyF' && (isMac && event.metaKey || !isMac && event.ctrlKey)) {
                 inputRef.current.focus();
             }
             // Auto search while typing
-            if (event.key.length === 1 && query === '' && !event.metaKey && !event.ctrlKey) {
+            if (event.key.length === 1 && search === '' && !event.metaKey && !event.ctrlKey && activeElementTag() !== 'input') {
                 inputRef.current.focus();
             }
         };
 
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [onQueryChange, inputRef]);
+    }, [onSearchChange, inputRef]);
 
     return (
         <div className={styles.searchBar}>
@@ -42,19 +42,23 @@ const SearchBar = (props) => {
                 type="text"
                 className={styles.field}
                 placeholder={`Начните вводить ID или название задачи (${isMac ? '⌘F' : 'Ctrl+F'})`}
-                value={query}
-                onChange={handleQueryChange}
+                value={search}
+                onChange={handleSearchChange}
                 ref={inputRef}
             />
             <button
                 className={styles.clearButton}
                 onClick={handleClearClick}
-                hidden={query === ''}
+                hidden={search === ''}
             >
                 ×
             </button>
         </div>
     );
 };
+
+const activeElementTag = () => {
+    return document.activeElement.tagName.toLowerCase();
+}
 
 export default SearchBar;
