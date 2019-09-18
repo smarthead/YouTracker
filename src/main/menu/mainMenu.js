@@ -2,7 +2,7 @@ import { app, Menu } from 'electron';
 import isMac from '../../common/isMac';
 import isDev from '../utils/isDev';
 
-export const makeMainMenu = (appState, onReload, onLogOut, onOpenIssuesInYouTrack) => {
+export const makeMainMenu = (appState, onReload, onLogOut) => {
     const appName = app.getName();
     const appVersion = app.getVersion();
 
@@ -102,11 +102,6 @@ export const makeMainMenu = (appState, onReload, onLogOut, onOpenIssuesInYouTrac
                 enabled: appState.isAuthorized,
                 accelerator: 'CommandOrControl+R',
                 click: onReload
-            },
-            { type: 'separator' },
-            {
-                label: 'Открыть на YouTrack...',
-                click: onOpenIssuesInYouTrack
             }
         ]
     };

@@ -80,10 +80,11 @@ class MainService extends EventEmitter {
         }
     }
 
-    setQuery(query) {
+    async setQuery(query) {
         if (this.session) {
-            this.session.issueService.setQuery(query);
+            return this.session.issueService.setQuery(query);
         }
+        return false;
     }
     
     get state() {

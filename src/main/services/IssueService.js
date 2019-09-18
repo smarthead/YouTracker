@@ -14,7 +14,7 @@ class IssueService extends EventEmitter {
         this.apiService = apiService;
         this.userId = userId;
         
-        this._query = { value: DEFAULT_QUERY, inProgress: false, error: null };
+        this._query = DEFAULT_QUERY;
         this._issues = [];
         this.destroyed = false;
     }
@@ -30,7 +30,7 @@ class IssueService extends EventEmitter {
     }
     
     initialize() {
-        this.restoreQueryValue();
+        this.restoreQuery();
         this.restoreIssues();
         this.startTimer();
     }
@@ -45,7 +45,7 @@ class IssueService extends EventEmitter {
             console.log('Loading issues...');
             
             this._issues = parseIssues(
-                await this.apiService.getIssues(this.query.value)
+                await this.apiService.getIssues(this.query)
             );
             this.storeIssues();
             
@@ -56,28 +56,28 @@ class IssueService extends EventEmitter {
         }
     }
 
-    async setQuery(queryValue) {
-        this._query.inProgress = true;
-        this._query.error = null;
-        this.dispatchChanges();
+    async setQuery(query) {
+        let success = true;
 
         try {
-            const isValid = await this.apiService.validateIssuesQuery(queryValue);
+            const isValid = await this.apiService.validateIssuesQuery(query);
 
             if (isValid) {
-                this._query.value = queryValue;
-                this.storeQueryValue();
+                this._query = query;
+                this.storeQuery();
+                this.dispatchChanges();
             } else {
-                throw new Error('Issues query is not valid:', queryValue);
+                throw new Error('Issues query is not valid:', query);
             }
         } catch (error) {
-            this._query.error = error;
+            success = false;
         }
 
-        this._query.inProgress = false;
-        this.dispatchChanges();
+        if (success) {
+            await this.reload();
+        }
 
-        await this.reload();
+        return success;
     }
     
     // Private
@@ -116,14 +116,14 @@ class IssueService extends EventEmitter {
         }
     }
 
-    storeQueryValue() {
-        store.set('issuesQueryValue', this._query.value);
+    storeQuery() {
+        store.set('issuesQuery', this._query);
     }
 
-    restoreQueryValue() {
-        const query = store.get('issuesQueryValue');
+    restoreQuery() {
+        const query = store.get('issuesQuery');
         if (query) {
-            this._query.value = query;
+            this._query = query;
             console.log(`Issues query restored: ${query}`);
         }
     }

@@ -1,36 +1,25 @@
 import React, { useState } from 'react';
 import styles from './QueryBar.css';
+import QueryView from './QueryView';
 import ChangeQueryView from './ChangeQueryView';
-import ipc from '../../ipc';
 
 const QueryBar = ({ query }) => {
 
     const [isEditing, setIsEditing] = useState(false);
 
-    const handleChangeClick = () => {
+    const handleChangeRequest = () => {
         setIsEditing(true);
     };
 
-    const handleChangeRequest = (newQuery) => {
-        ipc.changeIssuesQuery(newQuery);
-        setIsEditing(false);
-    };
-
-    const handleChangeCancel = () => {
+    const handleChangeComplete = () => {
         setIsEditing(false);
     };
 
     return (
         <div className={styles.queryBar}>
-            {
-                isEditing
-                ? <ChangeQueryView query={query.value} onChangeRequest={handleChangeRequest} onCancel={handleChangeCancel} />
-                : <>
-                    {query.value}
-                    &nbsp;&nbsp;
-                    <button className={styles.button} onClick={handleChangeClick}>Изменить</button>
-                </>
-            }
+            {isEditing
+            ? <ChangeQueryView query={query} onComplete={handleChangeComplete} />
+            : <QueryView query={query} onChangeRequest={handleChangeRequest} />}
         </div>
     );
 };

@@ -1,54 +1,85 @@
 import React, { useState } from 'react';
 import styles from './ChangeQueryView.css';
+import { ipcRenderer } from 'electron';
+import ipc from '../../ipc';
 
-const ChangeQueryView = ({ query, onChangeRequest, onCancel }) => {
+const ChangeQueryView = ({ query, onComplete }) => {
 
     const [newQuery, setNewQuery] = useState(query);
+    const [inProgress, setInProgress] = useState(false);
+    const [error, setError] = useState(false);
+
+    const sendChange = () => {
+        setError(false);
+        setInProgress(true);
+
+        ipcRenderer.once('change-issues-query-result', (event, success) => {
+            setInProgress(false);
+            if (success) {
+                onComplete();
+            } else {
+                setError(true);
+            }
+        });
+
+        ipc.changeIssuesQuery(newQuery);
+    };
 
     const handleInputChange = (event) => {
         setNewQuery(event.target.value);
-    }
+    };
 
     const handleInputKeyDown = (event) => {
         if (event.key === 'Enter') {
-            onChangeRequest(newQuery);
+            sendChange();
         } else if (event.key === 'Escape') {
-            onCancel();
+            onComplete();
         }
-    }
+    };
 
     const handleApplyClick = () => {
-        onChangeRequest(newQuery);
+        sendChange();
     };
 
     const handleCancelClick = () => {
-        onCancel();
+        onComplete();
     };
 
-    return (
-        <div className={styles.changeQueryView}>
+    return <>
+        <div className={styles.content}>
             <input
                 className={styles.field}
                 type="text"
-                placeholder="Все issue"
+                placeholder="Все задачи"
                 autoFocus={true}
                 value={newQuery}
+                disabled={inProgress}
                 onChange={handleInputChange}
                 onKeyDown= {handleInputKeyDown}
             />
             <button
                 className={styles.button}
+                disabled={inProgress}
                 onClick={handleApplyClick}
             >
                 Применить
             </button>
-
             <button
                 className={styles.button}
+                disabled={inProgress}
                 onClick={handleCancelClick}
             >
                 Отмена
             </button>
+        </div>
+        {error ? <ErrorBanner /> : ''}
+    </>;
+};
+
+const ErrorBanner = () => {
+    return (
+        <div className={styles.error}>
+            Некорректный поисковый запрос
         </div>
     );
 };
