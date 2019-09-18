@@ -2,7 +2,7 @@ import React from 'react';
 import { shell } from 'electron';
 import urls from '../../../common/urls';
 import ipc from '../../ipc';
-import { makeIssueContextMenu } from '../../menu/issueContextMenu';
+import { makeContextMenu } from '../../menu/issueContextMenu';
 import styles from './Issue.css';
 
 const Issue = (props) => {
@@ -13,11 +13,11 @@ const Issue = (props) => {
     
     const handleContextMenu = (event) => {
         event.preventDefault();
-        const menu = makeIssueContextMenu(id, idReadable, summary);
+        const menu = makeContextMenu(id, idReadable, summary);
         menu.popup();
     };
 
-    const handleDoubleClick = (event) => {
+    const handleDoubleClick = () => {
         if (isActive) {
             ipc.stopTracking();
         } else {

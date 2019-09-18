@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { shell } from 'electron';
 import urls from '../../../common/urls';
 import ipc from '../../ipc';
-import { makeIssueContextMenu } from '../../menu/issueContextMenu';
+import { makeContextMenu } from '../../menu/issueContextMenu';
 import styles from './Toolbar.css';
 import IdleBanner from './IdleBanner';
 
@@ -47,7 +47,7 @@ const Toolbar = ({ current }) => {
     const handleContextMenu = (event) => {
         if (disabled) return;
         event.preventDefault();
-        const menu = makeIssueContextMenu(id, idReadable, summary);
+        const menu = makeContextMenu(id, idReadable, summary);
         menu.popup();
     };
 
