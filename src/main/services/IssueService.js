@@ -1,4 +1,5 @@
 import { EventEmitter } from 'events';
+import log from 'electron-log';
 import parseIssue from './parseIssue';
 import store from './store';
 
@@ -42,18 +43,18 @@ class IssueService extends EventEmitter {
     
     async reload() {
         try {
-            console.log('Loading issues...');
+            log.info('Loading issues...');
             
             this._issues = (await this.apiService.getIssues(this.query))
                 .map(parseIssue);
                 
             this.storeIssues();
             
-            console.log(`${this._issues.length} issues loaded`);
+            log.info(`${this._issues.length} issues loaded`);
             this.dispatchChanges();
             this.dispatchReloaded();
         } catch (error) {
-            console.error('Issues loading error:', error);
+            log.warn('Issues loading error:', error);
         }
     }
 
@@ -117,7 +118,7 @@ class IssueService extends EventEmitter {
         const issues = store.get(`issues-${this.userId}`);
         if (issues) {
             this._issues = issues;
-            console.log(`${issues.length} issues restored`);
+            log.info(`${issues.length} issues restored`);
         }
     }
 
@@ -129,7 +130,7 @@ class IssueService extends EventEmitter {
         const query = store.get('issuesQuery');
         if (query) {
             this._query = query;
-            console.log(`Issues query restored: ${query}`);
+            log.info(`Issues query restored: ${query}`);
         }
     }
 }

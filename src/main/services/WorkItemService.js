@@ -1,4 +1,5 @@
 import { EventEmitter } from 'events';
+import log from 'electron-log';
 import store from './store';
 
 
@@ -46,11 +47,11 @@ class WorkItemService extends EventEmitter {
         
         const item = this.workItems[0];
         
-        console.log('Posting work item', item, '...');
+        log.info('Posting work item', item, '...');
         
         this.apiService.postWorkItem(item)
             .then(() => {
-                console.log('Work item posted');
+                log.info('Work item posted');
                 this.isSending = false;
                 
                 this.workItems.shift();
@@ -63,7 +64,7 @@ class WorkItemService extends EventEmitter {
                 }
             })
             .catch((error) =>{
-                console.error('Work item posting error:', error);
+                log.warn('Work item posting error:', error);
                 this.isSending = false;
                 this.startTimer();
             });
@@ -95,7 +96,7 @@ class WorkItemService extends EventEmitter {
                 startTime: new Date(item.startTime),
                 endTime: new Date(item.endTime),
             }));
-            console.log(`${workItems.length} work items restored`);
+            log.info(`${workItems.length} work items restored`);
         }
     }
 }
