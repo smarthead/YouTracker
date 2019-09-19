@@ -17,13 +17,13 @@ const IssueList = ({ query, issues, current }) => {
 
     return (
         <div className={styles.issueList}>
-            <QueryBar query={query}/>
+            <QueryBar query={query} count={issues.length} />
             <div>
                 {groups.map(group => (
-                    <IssueGroup key={group.id} group={group} activeIssueId={activeIssueId}/>
+                    <IssueGroup key={group.id} group={group} activeIssueId={activeIssueId} />
                 ))}
             </div>
-            <SearchBar search={search} onSearchChange={setSearch}/>
+            <SearchBar search={search} onSearchChange={setSearch} />
         </div>
     );
 }

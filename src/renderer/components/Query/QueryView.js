@@ -2,7 +2,7 @@ import React from 'react';
 import { makeContextMenu } from '../../menu/queryContextMenu';
 import styles from './QueryView.css';
 
-const QueryView = ({ query, onChangeRequest }) => {
+const QueryView = ({ query, count, onChangeRequest }) => {
     
     const handleContextMenu = (event) => {
         event.preventDefault();
@@ -13,7 +13,9 @@ const QueryView = ({ query, onChangeRequest }) => {
     return (
         <div className={styles.queryView} onContextMenu={handleContextMenu}>
             {query !== '' ? query : 'Все задачи'}
-            &nbsp;&nbsp;
+            &nbsp;
+            ({count})
+            &nbsp;
             <button className={styles.button} onClick={onChangeRequest}>
                 Изменить
             </button>

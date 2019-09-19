@@ -3,7 +3,7 @@ import styles from './QueryBar.css';
 import QueryView from './QueryView';
 import ChangeQueryView from './ChangeQueryView';
 
-const QueryBar = ({ query }) => {
+const QueryBar = ({ query, count }) => {
 
     const [isEditing, setIsEditing] = useState(false);
 
@@ -19,7 +19,7 @@ const QueryBar = ({ query }) => {
         <div className={styles.queryBar}>
             {isEditing
             ? <ChangeQueryView query={query} onComplete={handleChangeComplete} />
-            : <QueryView query={query} onChangeRequest={handleChangeRequest} />}
+            : <QueryView query={query} count={count} onChangeRequest={handleChangeRequest} />}
         </div>
     );
 };
