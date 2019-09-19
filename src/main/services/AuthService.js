@@ -1,6 +1,7 @@
 import { EventEmitter } from 'events';
 import fetch from 'node-fetch';
 import keytar from 'keytar';
+import log from 'electron-log';
 import urls from '../../common/urls';
 import { YOUTRACK_SERVICE_ID, APP_SERVICE_AUTHORIZATION } from '../../config';
 
@@ -70,7 +71,7 @@ class AuthService extends EventEmitter {
     }
     
     async logIn(login, password) {
-        console.log('Logging in...');
+        log.info('Logging in...');
         
         const params = new URLSearchParams();
         params.append('grant_type', 'password');
@@ -89,7 +90,7 @@ class AuthService extends EventEmitter {
         });
         
         if (!response.ok) {
-            console.error('Login error');
+            log.warn('Login error');
             throw new Error('Unauthorized');
         }
         
@@ -104,7 +105,7 @@ class AuthService extends EventEmitter {
         await this.storeRefreshToken(refreshToken);
         await this.storeUserId(userId);
         
-        console.log('Login succeeded');
+        log.info('Login succeeded');
     }
     
     async logOut() {
@@ -119,7 +120,7 @@ class AuthService extends EventEmitter {
             throw new Error('Unauthorized');
         }
         
-        console.log('Refreshing token...');
+        log.info('Refreshing token...');
         
         const params = new URLSearchParams();
         params.append('grant_type', 'refresh_token');
@@ -149,11 +150,11 @@ class AuthService extends EventEmitter {
             await this.storeRefreshToken(refresh_token);
         }
         
-        console.log('Refresh token succeeded');
+        log.info('Refresh token succeeded');
     }
     
     async getUserId(accessToken) {
-        console.log('Loading user info...');
+        log.info('Loading user info...');
         
         const response = await fetch(urls.getMe, {
             headers: {
@@ -164,13 +165,13 @@ class AuthService extends EventEmitter {
         });
         
         if (!response.ok) {
-            console.log('Error while loading user info');
+            log.warn('Error while loading user info');
             throw new Error('Error while loading user info');
         }
         
         const { id, login } = await response.json();
         
-        console.log(`User ${login} with id ${id} loaded`);
+        log.info(`User ${login} with id ${id} loaded`);
         
         return id;
     }

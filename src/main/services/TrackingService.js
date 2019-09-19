@@ -1,4 +1,5 @@
 import { EventEmitter } from 'events';
+import log from 'electron-log';
 import TrackingRecoveryService from './TrackingRecoveryService';
 import IdleMonitor from './IdleMonitor';
 import IdleNotifier from './IdleNotifier';
@@ -61,7 +62,7 @@ class TrackingService extends EventEmitter {
         this.idleMonitor.start();
         this.idleNotifier.start();
         
-        console.log(`Start tracking issue ${issue.idReadable} (${issue.id})`);
+        log.info(`Start tracking issue ${issue.idReadable} (${issue.id})`);
         
         this.dispatchChanges();
     }
@@ -89,7 +90,7 @@ class TrackingService extends EventEmitter {
         this._current.idle.warningIsShown = false;
 
         if (isValid) {
-            console.log(`Tracked ${minutes} m (${time} ms) in issue ${issue.idReadable} (${issue.id})`);
+            log.info(`Tracked ${minutes} m (${time} ms) in issue ${issue.idReadable} (${issue.id})`);
             
             this.workItemService.commitWorkItem({
                 issueId: issue.id,
@@ -99,7 +100,7 @@ class TrackingService extends EventEmitter {
                 endTime
             });
         } else {
-            console.log(`Work item is too short (${time} ms) in issue ${issue.idReadable} (${issue.id})`);
+            log.info(`Work item is too short (${time} ms) in issue ${issue.idReadable} (${issue.id})`);
         }
         
         this.dispatchChanges();
@@ -115,7 +116,7 @@ class TrackingService extends EventEmitter {
     }
 
     acceptIdleTime() {
-        console.log('Idle time accepted');
+        log.info('Idle time accepted');
         this.idleMonitor.reset();
     }
 
@@ -125,7 +126,7 @@ class TrackingService extends EventEmitter {
         this._current.idle.subtracted += this._current.idle.current;
         this.recoveryService.updateSubtracted(this._current.idle.subtracted);
 
-        console.log('Idle time subtracted');
+        log.info('Idle time subtracted');
 
         this.idleMonitor.reset();
     }
@@ -148,7 +149,7 @@ class TrackingService extends EventEmitter {
         const { time, minutes, isValid } = workItemTime(startTime, lastTime, subtracted);
         
         if (isValid) {
-            console.log(`Recovered ${minutes} m (${time} ms) in issue ${issueId}`);
+            log.info(`Recovered ${minutes} m (${time} ms) in issue ${issueId}`);
             
             this.workItemService.commitWorkItem({
                 issueId,
@@ -158,7 +159,7 @@ class TrackingService extends EventEmitter {
                 endTime: lastTime
             });
         } else {
-            console.log(`Recovered work item is too short (${time} ms) in issue ${issueId}`);
+            log.info(`Recovered work item is too short (${time} ms) in issue ${issueId}`);
         }
     }
 
@@ -167,7 +168,7 @@ class TrackingService extends EventEmitter {
 
         const idleTime = this.idleMonitor.idleTime;
 
-        console.log(`Idle time: ${idleTime}s`);
+        log.info(`Idle time: ${idleTime}s`);
 
         if (this._current.idle.current !== idleTime) {
             this._current.idle.current = idleTime;

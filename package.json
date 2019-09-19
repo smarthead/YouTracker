@@ -26,6 +26,7 @@
     "webpack-cli": "^3.3.7"
   },
   "dependencies": {
+    "electron-log": "^3.0.8",
     "electron-store": "^3.3.0",
     "electron-updater": "^4.1.2",
     "keytar": "^4.13.0",

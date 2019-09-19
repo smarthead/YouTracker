@@ -1,4 +1,5 @@
 import { EventEmitter } from 'events';
+import log from 'electron-log';
 import TrackingService from './TrackingService';
 import IssueService from './IssueService';
 import WorkItemService from './WorkItemService';
@@ -173,18 +174,18 @@ class MainService extends EventEmitter {
             issue => issue.id === id
         );
         if (issue) {
-            console.log('Current issue updated without reloading');
+            log.info('Current issue updated without reloading');
             trackingService.updateIssue(issue);
         } else {
             // Если нет, то загружаем отдельно
             this.apiService.getIssue(id)
                 .then(parseIssue)
                 .then(issue => {
-                    console.log('Current issue reloaded');
+                    log.info('Current issue reloaded');
                     trackingService.updateIssue(issue);
                 })
                 .catch(error => {
-                    console.log('Current issue reloading error:', error);
+                    log.warn('Current issue reloading error:', error);
                 });
         }
     }
