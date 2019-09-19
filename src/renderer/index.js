@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { ipcRenderer } from 'electron';
 import App from './components/App';
 
-let appState = { isAuthorized: false, state: null };
+let appState = { isInitialized: false, isAuthorized: false, state: null };
 
 const render = () => {
     ReactDOM.render(<App appState={appState} />, document.getElementById('root'));

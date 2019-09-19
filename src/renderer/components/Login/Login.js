@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
 import { ipcRenderer } from 'electron';
+import ErrorBanner from '../Error/ErrorBanner';
 import styles from './Login.css';
 
 const Login = () => {
+
     const [login, setLogin] = useState('');
     const [password, setPassword] = useState('');
+    const [inProgress, setInProgress] = useState(false);
+    const [error, setError] = useState(false);
     
     const handleLoginChange = (event) => {
         setLogin(event.target.value);
@@ -16,7 +20,18 @@ const Login = () => {
     
     const onSubmit = () => {
         event.preventDefault();
-        ipcRenderer.send('logIn', { login, password });
+
+        setError(false);
+        setInProgress(true);
+
+        ipcRenderer.once('log-in-result', (event, success) => {
+            if (!success) {
+                setInProgress(false);
+                setError(true);
+            }
+        });
+
+        ipcRenderer.send('log-in', { login, password });
     };
     
     return (
@@ -28,6 +43,7 @@ const Login = () => {
                     placeholder="Логин"
                     value={login}
                     onChange={handleLoginChange}
+                    disabled={inProgress}
                     autoFocus={true}
                 />
                 <br/>
@@ -36,13 +52,27 @@ const Login = () => {
                     className={styles.field}
                     placeholder="Пароль"
                     value={password}
+                    disabled={inProgress}
                     onChange={handlePasswordChange}
                 />
                 <br/>
-                <button type="submit" className={styles.button}>
+                <button
+                    type="submit"
+                    className={styles.button}
+                    disabled={inProgress || login === '' || password === ''}
+                >
                     Войти
                 </button>
             </form>
+            {
+                error
+                ? <div className={styles.error}>
+                    <ErrorBanner>
+                        Неверные логин/пароль или отсутствует подключение
+                    </ErrorBanner>
+                </div>
+                : ''
+            }
         </div>
     );
 };

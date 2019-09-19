@@ -3,14 +3,18 @@ import IssueList from './Issues/IssueList';
 import Login from './Login/Login';
 import Toolbar from './Toolbar/Toolbar';
 
-const App = (props) => {
-    const { appState } = props;
+const App = ({ appState }) => {
+    const { isInitialized, isAuthorized, state } = appState;
+    
+    if (!isInitialized) {
+        return null;
+    }
     
     return (
-        appState.isAuthorized
+        isAuthorized
         ? <>
-            <Toolbar { ...appState.state }/>
-            <IssueList { ...appState.state } />
+            <Toolbar { ...state }/>
+            <IssueList { ...state } />
         </>
         : <Login />
     );
