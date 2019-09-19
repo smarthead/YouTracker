@@ -33,6 +33,7 @@ const ChangeQueryView = ({ query, onComplete }) => {
         if (event.key === 'Enter') {
             sendChange();
         } else if (event.key === 'Escape') {
+            event.stopPropagation();
             onComplete();
         }
     };
