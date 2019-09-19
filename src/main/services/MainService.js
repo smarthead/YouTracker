@@ -13,6 +13,7 @@ class MainService extends EventEmitter {
         this.authService = new AuthService();
         this.apiService = new ApiService(this.authService);
         this.session = null;
+        this.isInitialized = false;
     }
     
     // Public
@@ -23,15 +24,25 @@ class MainService extends EventEmitter {
         });
         
         await this.authService.initialize();
-        
+
+        this.isInitialized = true;
+
         if (this.authService.isAuthorized) {
             this.createSession(this.authService.userId);
+        } else {
+            this.dispatchChanges();
         }
     }
     
     async logIn(login, password) {
-        await this.authService.logIn(login, password);
-        this.createSession(this.authService.userId);
+        let success = true;
+        try {
+            await this.authService.logIn(login, password);
+            this.createSession(this.authService.userId);
+        } catch (error) {
+            success = false;
+        }
+        return success;
     }
     
     async logOut() {
@@ -90,6 +101,7 @@ class MainService extends EventEmitter {
     
     get state() {
         return {
+            isInitialized: this.isInitialized,
             isAuthorized: this.authService.isAuthorized,
             state: this.session ? {
                 query: this.session.issueService.query,

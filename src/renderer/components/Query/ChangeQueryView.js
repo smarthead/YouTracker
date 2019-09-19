@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import styles from './ChangeQueryView.css';
 import { ipcRenderer } from 'electron';
 import ipc from '../../ipc';
+import ErrorBanner from '../Error/ErrorBanner';
+import styles from './ChangeQueryView.css';
 
 const ChangeQueryView = ({ query, onComplete }) => {
 
@@ -73,16 +74,16 @@ const ChangeQueryView = ({ query, onComplete }) => {
                 Отмена
             </button>
         </div>
-        {error ? <ErrorBanner /> : ''}
+        {
+            error
+            ? <div className={styles.error}>
+                <ErrorBanner>
+                    Некорректный поисковый запрос
+                </ErrorBanner>
+            </div>
+            : ''
+        }
     </>;
-};
-
-const ErrorBanner = () => {
-    return (
-        <div className={styles.error}>
-            Некорректный поисковый запрос
-        </div>
-    );
 };
 
 export default ChangeQueryView;

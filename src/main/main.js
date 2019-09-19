@@ -92,8 +92,9 @@ if (!app.requestSingleInstanceLock()) {
         mainService.subtractIdleTime();
     });
 
-    ipcMain.on('logIn', (event, { login, password }) => {
-        mainService.logIn(login, password);
+    ipcMain.on('log-in', async (event, { login, password }) => {
+        const success = await mainService.logIn(login, password);
+        event.reply('log-in-result', success);
     });
 
     ipcMain.on('change-issues-query', async (event, query) => {
