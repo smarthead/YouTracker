@@ -6,6 +6,14 @@ class ApiService {
         this.authService = authService;
     }
     
+    async getIssue(id) {
+        const response = await this.authService.authorizedFetch(urls.getIssue(id), {
+            headers
+        });
+
+        return response.ok ? await response.json() : null;
+    }
+    
     async getIssues(query) {
         const response = await this.authService.authorizedFetch(urls.getIssues(query), {
             headers

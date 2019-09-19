@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events';
-import parseIssues from './parseIssues';
+import parseIssue from './parseIssue';
 import store from './store';
 
 const AUTORELOAD_INTERVAL = 2 * 60 * 1000; // 2 minutes
@@ -44,13 +44,14 @@ class IssueService extends EventEmitter {
         try {
             console.log('Loading issues...');
             
-            this._issues = parseIssues(
-                await this.apiService.getIssues(this.query)
-            );
+            this._issues = (await this.apiService.getIssues(this.query))
+                .map(parseIssue);
+                
             this.storeIssues();
             
             console.log(`${this._issues.length} issues loaded`);
             this.dispatchChanges();
+            this.dispatchReloaded();
         } catch (error) {
             console.error('Issues loading error:', error);
         }
@@ -84,6 +85,10 @@ class IssueService extends EventEmitter {
 
     dispatchChanges() {
         this.emit('changed');
+    }
+
+    dispatchReloaded() {
+        this.emit('reloaded');
     }
     
     async startTimer() {
