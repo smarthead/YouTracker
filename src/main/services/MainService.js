@@ -83,7 +83,7 @@ class MainService extends EventEmitter {
 
     async setQuery(query) {
         if (this.session) {
-            return this.session.issueService.setQuery(query);
+            return await this.session.issueService.setQuery(query);
         }
         return false;
     }
