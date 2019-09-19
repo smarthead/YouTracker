@@ -4,7 +4,7 @@ import ipc from '../ipc';
 
 const { Menu } = remote;
 
-export const makeIssueContextMenu = (id, idReadable, summary) => {
+export const makeContextMenu = (id, idReadable, summary) => {
     const add = (minutes) => ipc.addWorkItem(id, minutes);
     
     return Menu.buildFromTemplate([

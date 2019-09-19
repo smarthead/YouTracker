@@ -4,6 +4,7 @@ import IssueService from './IssueService';
 import WorkItemService from './WorkItemService';
 import ApiService from './ApiService';
 import AuthService from './AuthService';
+import parseIssue from './parseIssue';
 
 class MainService extends EventEmitter {
     
@@ -79,11 +80,19 @@ class MainService extends EventEmitter {
             this.session.issueService.reload();
         }
     }
+
+    async setQuery(query) {
+        if (this.session) {
+            return await this.session.issueService.setQuery(query);
+        }
+        return false;
+    }
     
     get state() {
         return {
             isAuthorized: this.authService.isAuthorized,
             state: this.session ? {
+                query: this.session.issueService.query,
                 issues: this.session.issueService.issues,
                 current: this.session.trackingService.current
             } : null
@@ -104,15 +113,11 @@ class MainService extends EventEmitter {
         });
         
         issueService.on('changed', () => {
-            if (trackingService.current) {
-                const issue = issueService.issues.find(
-                    issue => issue.id === trackingService.current.issue.id
-                );
-                if (issue) {
-                    trackingService.updateIssue(issue);
-                }
-            }
             this.dispatchChanges();
+        });
+
+        issueService.on('reloaded', () => {
+            this.updateCurrentIssue();
         });
         
         workItemService.on('all-sent', () => {
@@ -140,6 +145,36 @@ class MainService extends EventEmitter {
     
     dispatchChanges() {
         this.emit('changed');
+    }
+
+    updateCurrentIssue() {
+        if (!this.session) return;
+        
+        const { issueService, trackingService } = this.session;
+
+        if (!trackingService.current) return;
+
+        const id = trackingService.current.issue.id;
+
+        // Если текущая issue уже есть в спике загруженных, берем оттуда
+        const issue = issueService.issues.find(
+            issue => issue.id === id
+        );
+        if (issue) {
+            console.log('Current issue updated without reloading');
+            trackingService.updateIssue(issue);
+        } else {
+            // Если нет, то загружаем отдельно
+            this.apiService.getIssue(id)
+                .then(parseIssue)
+                .then(issue => {
+                    console.log('Current issue reloaded');
+                    trackingService.updateIssue(issue);
+                })
+                .catch(error => {
+                    console.log('Current issue reloading error:', error);
+                });
+        }
     }
 }
 

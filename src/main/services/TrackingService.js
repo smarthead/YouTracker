@@ -135,6 +135,7 @@ class TrackingService extends EventEmitter {
             return;
         }
         this._current.issue = issue;
+        this.dispatchChanges();
     }
 
     // Private

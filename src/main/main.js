@@ -1,8 +1,7 @@
-import { app, BrowserWindow, ipcMain, Menu, shell } from 'electron';
+import { app, BrowserWindow, ipcMain, Menu } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import isDev from './utils/isDev';
 import isMac from '../common/isMac';
-import urls from '../common/urls';
 import MainService from './services/MainService';
 import { makeMainMenu } from './menu/mainMenu';
 
@@ -97,6 +96,11 @@ if (!app.requestSingleInstanceLock()) {
         mainService.logIn(login, password);
     });
 
+    ipcMain.on('change-issues-query', async (event, query) => {
+        const success = await mainService.setQuery(query);
+        event.reply('change-issues-query-result', success);
+    });
+
     mainService.on('changed', () => {
         const state = mainService.state;
         sendAppState(state);
@@ -107,8 +111,7 @@ if (!app.requestSingleInstanceLock()) {
         Menu.setApplicationMenu(makeMainMenu(
             appState,
             () => mainService.reloadIssues(),
-            () => mainService.logOut(),
-            () => shell.openExternal(urls.viewAllIssues)
+            () => mainService.logOut()
         ));
     };
 }

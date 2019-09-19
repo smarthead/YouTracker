@@ -22,7 +22,7 @@
 }
 
 .field:focus {
-    border-bottom: 1px solid #ffffff;
+    border-bottom: 1px solid white;
 }
 
 .clearButton {
