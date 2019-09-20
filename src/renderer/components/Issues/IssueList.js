@@ -9,9 +9,9 @@ const IssueList = ({ query, issues, current }) => {
     
     const [search, setSearch] = useState('');
 
-    const searchLowerCased = search.toLowerCase();
+    const normalizedSearch = search.toLowerCase().trim();
     const groups = group(
-        issues.filter(issue => satisfies(issue, searchLowerCased)),
+        issues.filter(issue => satisfies(issue, normalizedSearch)),
         issue => ({ ...issue.project })
     );
 
