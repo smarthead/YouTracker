@@ -8,7 +8,7 @@ import styles from './Issue.css';
 const Issue = (props) => {
     const {
         id, idReadable, summary, spentTime,
-        isActive
+        isActive, level
     } = props;
     
     const handleContextMenu = (event) => {
@@ -41,7 +41,9 @@ const Issue = (props) => {
                         <i className="fas fa-play" />
                     </button>
                 }
-                <button onClick={handleLinkClick}>{idReadable}</button>
+                <button style={{marginLeft: `${level * 20}px`}} onClick={handleLinkClick}>
+                    {idReadable}
+                </button>
                 <div className={styles.summary} title={summary} onDoubleClick={handleDoubleClick}>
                     {summary}
                 </div>

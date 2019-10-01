@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import IssueGroup from './IssueGroup';
 import SearchBar from '../SearchBar/SearchBar';
-import styles from './IssueList.css';
 import QueryBar from '../Query/QueryBar';
+import satisfies from './utils/satisfies';
+import group from './utils/group';
+import styles from './IssueList.css';
 
 const IssueList = ({ query, issues, current }) => {
     const activeIssueId = current && current.isActive ? current.issue.id : null;
@@ -27,26 +29,5 @@ const IssueList = ({ query, issues, current }) => {
         </div>
     );
 }
-
-const satisfies = (issue, search) => {
-    const idReadable = issue.idReadable.toLowerCase();
-    const summary = issue.summary.toLowerCase();
-    return idReadable.includes(search) || summary.includes(search);
-}
-
-const group = (issues, grouper) => {
-    let groups = new Map();
-
-    for (const issue of issues) {
-        const { id, name } = grouper(issue);
-        let group = groups.has(id) ? groups.get(id) : { name: name, issues: [] };
-        group.issues.push(issue);
-        groups.set(id, group);
-    }
-
-    return [...groups.keys()].map(key => (
-        { id: key, ...groups.get(key) }
-    ));
-};
 
 export default IssueList;
