@@ -13,7 +13,7 @@ export default (issues) => {
         }
     });
 
-    let result = [];
+    const result = [];
 
     const append = (container, level) => {
         const { issue } = container;

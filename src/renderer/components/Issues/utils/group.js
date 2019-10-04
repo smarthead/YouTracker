@@ -1,9 +1,9 @@
 export default (issues, grouper) => {
-    let groups = new Map();
+    const groups = new Map();
 
     issues.forEach(issue => {
         const { id, name } = grouper(issue);
-        let group = groups.has(id) ? groups.get(id) : { name, issues: [] };
+        const group = groups.has(id) ? groups.get(id) : { name, issues: [] };
         group.issues.push(issue);
         groups.set(id, group);
     });

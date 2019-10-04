@@ -28,6 +28,8 @@ const Issue = (props) => {
     const handleLinkClick = () => {
         shell.openExternal(urls.viewIssue(idReadable))
     };
+
+    const levelMargin = { marginLeft: level * 20 };
     
     return (
         <div className={styles.issue} onContextMenu={handleContextMenu}>
@@ -41,7 +43,7 @@ const Issue = (props) => {
                         <i className="fas fa-play" />
                     </button>
                 }
-                <button style={{marginLeft: `${level * 20}px`}} onClick={handleLinkClick}>
+                <button style={levelMargin} onClick={handleLinkClick}>
                     {idReadable}
                 </button>
                 <div className={styles.summary} title={summary} onDoubleClick={handleDoubleClick}>
