@@ -3,7 +3,7 @@ stages:
   - publish
 
 cache:
-  key: ${CI_COMMIT_REF_SLUG}
+  key: node_modules
   paths:
     - node_modules/
 
