@@ -7,6 +7,7 @@
   "scripts": {
     "start": "webpack --mode=development && electron .",
     "build": "webpack --mode=production && electron-builder --publish never",
+    "test": "webpack --config webpack.config.test.js && mocha \"./build-test/**/*.js\"",
     "publish": "webpack --mode=production && electron-builder --mac --win --linux --publish always",
     "postinstall": "electron-builder install-app-deps"
   },
@@ -21,6 +22,8 @@
     "css-loader": "^3.2.0",
     "electron": "^6.0.2",
     "electron-builder": "^21.2.0",
+    "glob": "^7.1.4",
+    "mocha": "^6.2.1",
     "style-loader": "^1.0.0",
     "webpack": "^4.39.2",
     "webpack-cli": "^3.3.7"

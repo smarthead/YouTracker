@@ -1,16 +1,26 @@
 stages:
+  - test
   - publish
 
 cache:
-  key: ${CI_COMMIT_REF_SLUG}
+  key: node_modules
   paths:
     - node_modules/
 
 before_script:
   - npm install
 
+testing:
+  stage: test
+  script:
+    - npm run test
+
 publishing:
   stage: publish
   script:
     - npm run publish
+  only:
+    refs:
+      - master
   when: manual
+  
