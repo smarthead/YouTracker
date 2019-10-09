@@ -1,5 +1,5 @@
 import assert from 'assert';
-import makeTree from '../../../../../src/renderer/components/Issues/utils/makeTree';
+import makeTree from '~/renderer/components/Issues/utils/makeTree';
 
 describe('makeTree()', function() {
     it('should return empty list when the input list is empty', function() {
