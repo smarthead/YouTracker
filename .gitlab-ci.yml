@@ -1,4 +1,5 @@
 stages:
+  - test
   - publish
 
 cache:
@@ -9,8 +10,17 @@ cache:
 before_script:
   - npm install
 
+testing:
+  stage: test
+  script:
+    - npm run test
+
 publishing:
   stage: publish
   script:
     - npm run publish
+  only:
+    refs:
+      - master
   when: manual
+  
