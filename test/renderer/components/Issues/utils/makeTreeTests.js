@@ -3,21 +3,21 @@ import makeTree from '~/renderer/components/Issues/utils/makeTree';
 
 describe('makeTree()', function() {
     it('should return empty list when the input list is empty', function() {
-        const input = [];
+        const issues = [];
 
-        const result = makeTree(input);
+        const result = makeTree(issues);
 
         assert.deepStrictEqual(result, []);
     });
 
     it('should make tree structure with levels', function() {
-        const input = [
+        const issues = [
             { id: '1' },
             { id: '2' },
             { id: '3', parentId: '1' },
         ];
 
-        const result = makeTree(input);
+        const result = makeTree(issues);
 
         assert.deepStrictEqual(result, [
             { level: 0, issue: { id: '1' } },
@@ -28,12 +28,12 @@ describe('makeTree()', function() {
     });
 
     it('should return flat list when the input list is flat', function() {
-        const input = [
+        const issues = [
             { id: '1' },
             { id: '2' }
         ];
 
-        const result = makeTree(input);
+        const result = makeTree(issues);
 
         assert.deepStrictEqual(result, [
             { level: 0, issue: { id: '1' } },
@@ -42,13 +42,13 @@ describe('makeTree()', function() {
     });
 
     it('should lift the parent up', function() {
-        const input = [
+        const issues = [
             { id: '2', parentId: '1' },
             { id: '1' },
             { id: '3' }
         ];
 
-        const result = makeTree(input);
+        const result = makeTree(issues);
 
         assert.deepStrictEqual(result, [
             { level: 0, issue: { id: '1' } },
@@ -58,13 +58,13 @@ describe('makeTree()', function() {
     });
 
     it('should keep the order of children', function() {
-        const input = [
+        const issues = [
             { id: '1' },
             { id: '3', parentId: '1' },
             { id: '2', parentId: '1' }
         ];
 
-        const result = makeTree(input);
+        const result = makeTree(issues);
 
         assert.deepStrictEqual(result, [
             { level: 0, issue: { id: '1' } },
@@ -74,13 +74,13 @@ describe('makeTree()', function() {
     });
 
     it('should ignore parent id that is not in the list', function() {
-        const input = [
+        const issues = [
             { id: '1' },
             { id: '2', parentId: '1' },
             { id: '3', parentId: '4' }
         ];
 
-        const result = makeTree(input);
+        const result = makeTree(issues);
 
         assert.deepStrictEqual(result, [
             { level: 0, issue: { id: '1' } },
@@ -90,13 +90,13 @@ describe('makeTree()', function() {
     });
 
     it('should collect child items regardless of their position in the list', function() {
-        const input = [
+        const issues = [
             { id: '1', parentId: '2' },
             { id: '2' },
             { id: '3', parentId: '2' }
         ];
 
-        const result = makeTree(input);
+        const result = makeTree(issues);
 
         assert.deepStrictEqual(result, [
             { level: 0, issue: { id: '2' } },
@@ -106,7 +106,7 @@ describe('makeTree()', function() {
     });
 
     it('should make multi-level tree', function() {
-        const input = [
+        const issues = [
             { id: '1', parentId: '2' },
             { id: '2', parentId: '3'},
             { id: '3', parentId: '4' },
@@ -115,7 +115,7 @@ describe('makeTree()', function() {
             { id: '6' }
         ];
 
-        const result = makeTree(input);
+        const result = makeTree(issues);
 
         assert.deepStrictEqual(result, [
             { level: 0, issue: { id: '6' } },
@@ -128,7 +128,7 @@ describe('makeTree()', function() {
     });
 
     it('should make complex tree structure', function() {
-        const input = [
+        const issues = [
             { id: '1', parentId: '3' },
             { id: '2', parentId: '_' },
             { id: '3', parentId: '2' },
@@ -138,7 +138,7 @@ describe('makeTree()', function() {
             { id: '7', parentId: '3' }
         ];
 
-        const result = makeTree(input);
+        const result = makeTree(issues);
 
         assert.deepStrictEqual(result, [
             { level: 0, issue: { id: '2', parentId: '_' } },
