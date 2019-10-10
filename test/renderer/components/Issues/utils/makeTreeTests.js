@@ -10,7 +10,24 @@ describe('makeTree()', function() {
         assert.deepStrictEqual(result, []);
     });
 
-    it('should return equal list when the input list is flat', function() {
+    it('should make tree structure with levels', function() {
+        const input = [
+            { id: '1' },
+            { id: '2' },
+            { id: '3', parentId: '1' },
+        ];
+
+        const result = makeTree(input);
+
+        assert.deepStrictEqual(result, [
+            { level: 0, issue: { id: '1' } },
+                // Visualize tree structure by indent
+                { level: 1, issue: { id: '3', parentId: '1' } },
+            { level: 0, issue: { id: '2' } }
+        ]);
+    });
+
+    it('should return flat list when the input list is flat', function() {
         const input = [
             { id: '1' },
             { id: '2' }
@@ -28,13 +45,15 @@ describe('makeTree()', function() {
         const input = [
             { id: '2', parentId: '1' },
             { id: '1' },
+            { id: '3' }
         ];
 
         const result = makeTree(input);
 
         assert.deepStrictEqual(result, [
             { level: 0, issue: { id: '1' } },
-            { level: 1, issue: { id: '2', parentId: '1' } }
+                { level: 1, issue: { id: '2', parentId: '1' } },
+            { level: 0, issue: { id: '3' } }
         ]);
     });
 
@@ -49,8 +68,24 @@ describe('makeTree()', function() {
 
         assert.deepStrictEqual(result, [
             { level: 0, issue: { id: '1' } },
-            { level: 1, issue: { id: '3', parentId: '1' } },
-            { level: 1, issue: { id: '2', parentId: '1' } }
+                { level: 1, issue: { id: '3', parentId: '1' } },
+                { level: 1, issue: { id: '2', parentId: '1' } }
+        ]);
+    });
+
+    it('should ignore parent id that is not in the list', function() {
+        const input = [
+            { id: '1' },
+            { id: '2', parentId: '1' },
+            { id: '3', parentId: '4' }
+        ];
+
+        const result = makeTree(input);
+
+        assert.deepStrictEqual(result, [
+            { level: 0, issue: { id: '1' } },
+                { level: 1, issue: { id: '2', parentId: '1' } },
+            { level: 0, issue: { id: '3', parentId: '4' } }
         ]);
     });
 
@@ -65,8 +100,8 @@ describe('makeTree()', function() {
 
         assert.deepStrictEqual(result, [
             { level: 0, issue: { id: '2' } },
-            { level: 1, issue: { id: '1', parentId: '2' } },
-            { level: 1, issue: { id: '3', parentId: '2' } }
+                { level: 1, issue: { id: '1', parentId: '2' } },
+                { level: 1, issue: { id: '3', parentId: '2' } }
         ]);
     });
 
@@ -84,11 +119,35 @@ describe('makeTree()', function() {
 
         assert.deepStrictEqual(result, [
             { level: 0, issue: { id: '6' } },
-            { level: 1, issue: { id: '5', parentId: '6' } },
-            { level: 2, issue: { id: '4', parentId: '5' } },
-            { level: 3, issue: { id: '3', parentId: '4' } },
-            { level: 4, issue: { id: '2', parentId: '3' } },
-            { level: 5, issue: { id: '1', parentId: '2' } }
+                { level: 1, issue: { id: '5', parentId: '6' } },
+                    { level: 2, issue: { id: '4', parentId: '5' } },
+                        { level: 3, issue: { id: '3', parentId: '4' } },
+                            { level: 4, issue: { id: '2', parentId: '3' } },
+                                { level: 5, issue: { id: '1', parentId: '2' } }
+        ]);
+    });
+
+    it('should make complex tree structure', function() {
+        const input = [
+            { id: '1', parentId: '3' },
+            { id: '2', parentId: '_' },
+            { id: '3', parentId: '2' },
+            { id: '4', parentId: '6' },
+            { id: '5', parentId: '3' },
+            { id: '6' },
+            { id: '7', parentId: '3' }
+        ];
+
+        const result = makeTree(input);
+
+        assert.deepStrictEqual(result, [
+            { level: 0, issue: { id: '2', parentId: '_' } },
+                { level: 1, issue: { id: '3', parentId: '2' } },
+                    { level: 2, issue: { id: '1', parentId: '3' } },
+                    { level: 2, issue: { id: '5', parentId: '3' } },
+                    { level: 2, issue: { id: '7', parentId: '3' } },
+            { level: 0, issue: { id: '6' } },
+                { level: 1, issue: { id: '4', parentId: '6' } },
         ]);
     });
 });
