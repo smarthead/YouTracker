@@ -8,6 +8,15 @@ export default (jsonIssue) => {
         const { value: { minutes, presentation }} = spentTimeField;
         spentTime = { minutes, presentation };
     }
+
+    const parentLink = jsonIssue.links.find(
+        link => link.direction === 'INWARD' && link.linkType.name === 'Subtask'
+    );
+    
+    let parentId = null;
+    if (parentLink && parentLink.issues.length > 0) {
+        parentId = parentLink.issues[0].id;
+    }
     
     return {
         id: jsonIssue.id,
@@ -17,6 +26,7 @@ export default (jsonIssue) => {
             id: jsonIssue.project.shortName,
             name: jsonIssue.project.name
         },
-        spentTime
+        spentTime,
+        parentId
     }
 };
