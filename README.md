@@ -1,41 +1,26 @@
-# YouTracker — тайм-трекер для YouTrack
+# YouTracker — time-tracker for [YouTrack](https://www.jetbrains.com/youtrack)
 
-[Список изменений](CHANGELOG.md)
-
-## Установка
-
-- [Скачать для Windows](https://youtracker.smarthead.ru/YouTracker-installer.exe)
-- [Скачать для macOS](https://youtracker.smarthead.ru/YouTracker.dmg)
-- [Скачать для Linux](https://youtracker.smarthead.ru/YouTracker.AppImage)
-
-После установки приложение обновляется автоматически.
+Built on [Electron](https://electronjs.org) and [React](https://reactjs.org).
 
 
-## Разработка
+## Features
 
-YouTracker разработан на [Electron](https://electronjs.org) и [React](https://reactjs.org).
+- Offline mode
+- Idle time tracking
 
-Дистрибутивы распространяются через Amazon S3.
 
+## Available Scripts
 
-### Инструкции
+In the project directory, you can run:
 
-1. `git clone https://gitlab.smarthead.ru/youtrack/youtracker.git`
-2. `cd youtracker`
-3. `npm install`
-4. `npm start`
+### `npm start`
 
-### Доступные скрипты
+Runs the app in the development mode.
 
-#### `npm start`
-Запускает приложение в режиме разработки.
+### `npm run test`
 
-#### `npm run build`
-Собирает приложение и упаковывает в инсталлятор локально.
+Runs tests.
 
-#### `npm run test`
-Запускает тесты.
+### `npm run build`
 
-#### `npm run publish`
-Собирает приложение, упаковывает в инсталлятор и отправляет его на S3.
-Вызывается из GitLab CI.
+Builds the app for current platform to the `dist` folder.

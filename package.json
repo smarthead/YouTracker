@@ -6,9 +6,9 @@
   "main": "build/main.bundle.js",
   "scripts": {
     "start": "webpack --mode=development && electron .",
-    "build": "webpack --mode=production && electron-builder --publish never",
+    "build": "webpack --mode=production && electron-builder",
     "test": "webpack --config webpack.config.test.js && mocha \"./build-test/**/*.js\"",
-    "publish": "webpack --mode=production && electron-builder --mac --win --linux --publish always",
+    "publish": "webpack --mode=production && electron-builder --mac --win --linux",
     "postinstall": "electron-builder install-app-deps"
   },
   "keywords": [],
@@ -49,10 +49,6 @@
     ],
     "directories": {
       "buildResources": "assets"
-    },
-    "publish": {
-      "provider": "s3",
-      "bucket": "youtracker.smarthead.ru"
     },
     "mac": {
       "darkModeSupport": true,
