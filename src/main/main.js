@@ -4,6 +4,7 @@ import isDev from './utils/isDev';
 import isMac from '../common/isMac';
 import MainService from './services/MainService';
 import { makeMainMenu } from './menu/mainMenu';
+require('@electron/remote/main').initialize()
 
 let mainWindow = null;
 let mainService = null;
@@ -22,6 +23,7 @@ if (!app.requestSingleInstanceLock()) {
             backgroundColor: "#282c34",
             webPreferences: {
                 nodeIntegration: true,
+                contextIsolation: false,
                 scrollBounce: true,
                 devTools: isDev
             }
@@ -32,7 +34,8 @@ if (!app.requestSingleInstanceLock()) {
         mainWindow.on('closed', () => {
             mainWindow = null;
         });
-        
+
+        require("@electron/remote/main").enable(mainWindow.webContents)
         mainWindow.webContents.on('did-finish-load', () => {
             sendAppState(mainService.state);
         });

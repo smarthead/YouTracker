@@ -1,7 +1,7 @@
-import { remote, shell } from 'electron';
+import { shell } from 'electron';
 import urls from '../../common/urls';
 
-const { Menu } = remote;
+const { Menu } = require('@electron/remote')
 
 export const makeContextMenu = (query) => {
     return Menu.buildFromTemplate([
