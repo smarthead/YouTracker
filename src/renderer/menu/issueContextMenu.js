@@ -1,8 +1,8 @@
-import { remote, clipboard, shell } from 'electron';
+import { clipboard, shell } from 'electron';
 import urls from '../../common/urls';
 import ipc from '../ipc';
 
-const { Menu } = remote;
+const { Menu } = require('@electron/remote')
 
 export const makeContextMenu = (id, idReadable, summary) => {
     const add = (minutes) => ipc.addWorkItem(id, minutes);
