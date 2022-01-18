@@ -8,7 +8,7 @@
     "start": "webpack --mode=development && electron .",
     "build": "webpack --mode=production && electron-builder",
     "test": "webpack --config webpack.config.test.js && mocha \"./build-test/**/*.js\"",
-    "publish": "webpack --mode=production && electron-builder --mac --win --linux",
+    "publish": "webpack --mode=production && electron-builder",
     "postinstall": "electron-builder install-app-deps"
   },
   "keywords": [],
