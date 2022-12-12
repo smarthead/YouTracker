@@ -1,12 +1,14 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { ipcRenderer } from 'electron';
 import App from './components/App';
 
 let appState = { isInitialized: false, isAuthorized: false, state: null };
 
+const root = createRoot(document.getElementById('root'));
+
 const render = () => {
-    ReactDOM.render(<App appState={appState} />, document.getElementById('root'));
+    root.render(<App appState={appState} />);
 }
 
 ipcRenderer.on('app-state-updated', (event, arg) => {
