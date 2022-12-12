@@ -3,7 +3,7 @@ import { YOUTRACK_URL } from '../config';
 // API
 
 const oauth = `${YOUTRACK_URL}/hub/api/rest/oauth2/token`;
-const getMe = `${YOUTRACK_URL}/api/admin/users/me?fields=id,login`;
+const getMe = `${YOUTRACK_URL}/api/users/me?fields=id,login`;
 
 const issueFields = 'id,idReadable,summary,project(shortName,name)' +
     ',links(linkType(name),direction,issues(id))' +
