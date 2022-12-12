@@ -3,7 +3,7 @@ export const YOUTRACK_URL = 'https://youtrack.smarthead.ru';
 
 // YouTrack Service id
 // https://youtrack.smarthead.ru/hub/services
-export const YOUTRACK_SERVICE_ID = '011421ec-e423-429d-9610-11a5fd56b6c4';
+export const YOUTRACK_SERVICE_ID = 'd438255c-071c-4987-b084-fe9d45cd1242';
 
 // Base authorization of Time Tracker App Service
 // https://youtrack.smarthead.ru/hub/services
