@@ -1,7 +1,7 @@
 {
   "name": "youtracker",
   "productName": "YouTracker",
-  "version": "1.3.1",
+  "version": "1.3.2",
   "description": "",
   "main": "build/main.bundle.js",
   "scripts": {
@@ -54,8 +54,11 @@
     },
     "mac": {
       "darkModeSupport": true,
-      "target": "dmg",
-      "artifactName": "${productName}.${ext}"
+      "target": {
+        "target": "dmg",
+        "arch": ["x64", "arm64"]
+      },
+      "artifactName": "${productName}-${arch}.${ext}"
     },
     "win": {
       "target": "nsis",
